@@ -2,16 +2,16 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Component class="javax.persistence.EntityManager" name="entityManager">
+    <Component class="javax.persistence.EntityManager" name="entityManager0">
       <Properties>
-        <Property name="persistenceUnit" type="java.lang.String" value="FYP-StockScreenerPU"/>
+        <Property name="persistenceUnit" type="java.lang.String" value="fyp?zeroDateTimeBehavior=convertToNullPU"/>
       </Properties>
     </Component>
     <Component class="javax.persistence.Query" name="stockQuery">
       <Properties>
         <Property name="query" type="java.lang.String" value="SELECT s FROM Stock s"/>
         <Property name="entityManager" type="java.lang.Object" editor="org.netbeans.modules.form.j2ee.J2EEPropertyModifier$EMProperty$EntityManagerEditor">
-          <ComponentRef name="entityManager"/>
+          <ComponentRef name="entityManager0"/>
         </Property>
       </Properties>
     </Component>
@@ -221,18 +221,128 @@
               <SubComponents>
                 <Component class="javax.swing.JTable" name="jTable_FA">
                   <Properties>
-                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="0" rowCount="0"/>
-                    </Property>
                     <Property name="autoResizeMode" type="int" value="4"/>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                      <TableColumnModel selectionModel="1"/>
+                      <TableColumnModel selectionModel="1">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                      </TableColumnModel>
                     </Property>
                     <Property name="columnSelectionAllowed" type="boolean" value="true"/>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <BindingProperties>
+                    <BindingProperty name="elements" source="stockList" target="jTable_FA" targetPath="elements" updateStrategy="0" immediately="true">
+                      <Subbinding sourcePath="${stockSymbol}">
+                        <BindingParameter name="NAME" value="Stock Symbol"/>
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+                      </Subbinding>
+                      <Subbinding sourcePath="${stockCode}">
+                        <BindingParameter name="NAME" value="Stock Code"/>
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+                      </Subbinding>
+                      <Subbinding sourcePath="${stockName}">
+                        <BindingParameter name="NAME" value="Stock Name"/>
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+                      </Subbinding>
+                      <Subbinding sourcePath="${stockLow}">
+                        <BindingParameter name="NAME" value="Stock Low"/>
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Float.class"/>
+                      </Subbinding>
+                      <Subbinding sourcePath="${stockHigh}">
+                        <BindingParameter name="NAME" value="Stock High"/>
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Float.class"/>
+                      </Subbinding>
+                      <Subbinding sourcePath="${stockPrev}">
+                        <BindingParameter name="NAME" value="Stock Prev"/>
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Float.class"/>
+                      </Subbinding>
+                      <Subbinding sourcePath="${stockLast}">
+                        <BindingParameter name="NAME" value="Stock Last"/>
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Float.class"/>
+                      </Subbinding>
+                      <Subbinding sourcePath="${stockBGF}">
+                        <BindingParameter name="NAME" value="Stock BGF"/>
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigInteger.class"/>
+                      </Subbinding>
+                      <Subbinding sourcePath="${stockDCF}">
+                        <BindingParameter name="NAME" value="Stock DCF"/>
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigInteger.class"/>
+                      </Subbinding>
+                      <Subbinding sourcePath="${stockDEM}">
+                        <BindingParameter name="NAME" value="Stock DEM"/>
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigInteger.class"/>
+                      </Subbinding>
+                      <Subbinding sourcePath="${stockGGM}">
+                        <BindingParameter name="NAME" value="Stock GGM"/>
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigInteger.class"/>
+                      </Subbinding>
+                      <Subbinding sourcePath="${stockGrowth}">
+                        <BindingParameter name="NAME" value="Stock Growth"/>
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Float.class"/>
+                      </Subbinding>
+                    </BindingProperty>
+                  </BindingProperties>
                 </Component>
               </SubComponents>
             </Container>

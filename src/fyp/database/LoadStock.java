@@ -3,19 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fyp.yahooapi;
+package fyp.database;
 
 /**
  *
  * @author Lim
  */
-public class Yahooapi {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        new StockTest().testStock();
-    }
+public class LoadStock {
+    DatabaseConnection dc = new DatabaseConnection();
+    
     
 }

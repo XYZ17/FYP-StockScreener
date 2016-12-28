@@ -1,6 +1,6 @@
 package fyp.yahooapi;
 
-public class Stock { 
+public class StockDetailsAPI { 
 	
 	private String symbol; 
 	private double price;
@@ -20,7 +20,7 @@ public class Stock {
 	private double open;
 	private String exchange;
 	
-	public Stock(String symbol, double price, int volume, double pe, double eps, double week52low,      
+	public StockDetailsAPI(String symbol, double price, int volume, double pe, double eps, double week52low,      
 					double week52high, double daylow, double dayhigh, double movingav50day, double marketcap, String name, String currency, double shortRatio, double previousClose, double open, String exchange) {	
 		this.symbol = symbol; 
 		this.price = price;	
@@ -41,7 +41,7 @@ public class Stock {
 		this.exchange = exchange;
 	} 
 
-    Stock() {
+    StockDetailsAPI() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 	

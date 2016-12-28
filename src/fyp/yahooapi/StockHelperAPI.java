@@ -2,9 +2,9 @@ package fyp.yahooapi;
 
 import java.util.regex.Pattern;
 
-public class StockHelper {
+public class StockHelperAPI {
 	
-	public StockHelper() {
+	public StockHelperAPI() {
 		
 	}
 	

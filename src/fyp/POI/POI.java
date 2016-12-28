@@ -9,7 +9,6 @@ package fyp.POI;
  *
  * @author Lim
  */
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Iterator;
@@ -22,15 +21,15 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+public class POI {
 
-public class POIFunction {
-     static XSSFRow row;
+    static XSSFRow row;
     static XSSFCell cell;
     
-   public int readStockSymbol()
+   public static void main(String[] args) throws Exception 
    {
       FileInputStream fis = new FileInputStream(
-      new File("../../../files/Stocklist.xlsx"));
+      new File("FA_AAX.xlsx"));
       XSSFWorkbook wb = new XSSFWorkbook(fis);
       XSSFSheet sheet = wb.getSheetAt(0);
       FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();

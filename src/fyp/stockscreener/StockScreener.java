@@ -77,43 +77,55 @@ public class StockScreener extends javax.swing.JFrame {
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockSymbol}"));
         columnBinding.setColumnName("Stock Symbol");
         columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockCode}"));
         columnBinding.setColumnName("Stock Code");
         columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockName}"));
         columnBinding.setColumnName("Stock Name");
         columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockLow}"));
-        columnBinding.setColumnName("Stock Low");
+        columnBinding.setColumnName("Low");
         columnBinding.setColumnClass(Float.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockHigh}"));
-        columnBinding.setColumnName("Stock High");
+        columnBinding.setColumnName("High");
         columnBinding.setColumnClass(Float.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockPrev}"));
-        columnBinding.setColumnName("Stock Prev");
+        columnBinding.setColumnName("Prev");
         columnBinding.setColumnClass(Float.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockLast}"));
-        columnBinding.setColumnName("Stock Last");
+        columnBinding.setColumnName("Last");
         columnBinding.setColumnClass(Float.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockBGF}"));
-        columnBinding.setColumnName("Stock BGF");
+        columnBinding.setColumnName("BGF");
         columnBinding.setColumnClass(java.math.BigInteger.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockDCF}"));
-        columnBinding.setColumnName("Stock DCF");
+        columnBinding.setColumnName("DCF");
         columnBinding.setColumnClass(java.math.BigInteger.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockDEM}"));
-        columnBinding.setColumnName("Stock DEM");
+        columnBinding.setColumnName("DEM");
         columnBinding.setColumnClass(java.math.BigInteger.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockGGM}"));
-        columnBinding.setColumnName("Stock GGM");
+        columnBinding.setColumnName("GGM");
         columnBinding.setColumnClass(java.math.BigInteger.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockGrowth}"));
-        columnBinding.setColumnName("Stock Growth");
-        columnBinding.setColumnClass(Float.class);
+        columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane1.setViewportView(jTable_FA);
         jTable_FA.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (jTable_FA.getColumnModel().getColumnCount() > 0) {
+            jTable_FA.getColumnModel().getColumn(2).setMinWidth(200);
+            jTable_FA.getColumnModel().getColumn(2).setPreferredWidth(200);
+        }
 
         javax.swing.GroupLayout WatchlistPanelLayout = new javax.swing.GroupLayout(WatchlistPanel);
         WatchlistPanel.setLayout(WatchlistPanelLayout);
@@ -125,8 +137,8 @@ public class StockScreener extends javax.swing.JFrame {
             WatchlistPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, WatchlistPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(442, 442, 442))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(378, 378, 378))
         );
 
         jTabbedPane1.addTab("Stock Watchlist", WatchlistPanel);
@@ -219,7 +231,7 @@ public class StockScreener extends javax.swing.JFrame {
                     .addGroup(IVPanelLayout.createSequentialGroup()
                         .addGap(46, 46, 46)
                         .addComponent(jLabel8)))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(111, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Intrinsic Value", IVPanel);
@@ -314,9 +326,9 @@ public class StockScreener extends javax.swing.JFrame {
                     .addComponent(SearchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_Find))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 534, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 599, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel_LastUpdate)
                 .addContainerGap())

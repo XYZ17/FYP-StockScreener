@@ -2,15 +2,31 @@ package fyp.yahooapi;
 
 import org.junit.Test;
 
-public class StockTest { 
+public class StockLoadAPI { 
 	
 	@Test
-	public void testStock() { 
-		
-            for(int i=0; i<9; i++){
-                Stock s = StockFetcher.getStock("509"+i +".KL");
-		System.out.println(s.getName() + s.getCurrency() + s.getPrice());
-            }
+        
+        public String getStockName(String StockSymbol){
+            String SS = StockSymbol;
+            StockDetailsAPI s = StockFetcherAPI.getStock(SS);
+            String SName = s.getName();
+            return SName;
+        }
+	public double getStockLow(String StockSymbol) { 
+                StockDetailsAPI s = StockFetcherAPI.getStock(StockSymbol);
+                return s.getDaylow();
+	} 
+        public double getStockHigh(String StockSymbol) { 
+                StockDetailsAPI s = StockFetcherAPI.getStock(StockSymbol);
+                return s.getDayhigh();
+	} 
+        public double getStockPrev(String StockSymbol) { 
+                StockDetailsAPI s = StockFetcherAPI.getStock(StockSymbol);
+                return s.getPreviousClose();
+	} 
+        public double getStockLast(String StockSymbol) { 
+                StockDetailsAPI s = StockFetcherAPI.getStock(StockSymbol);
+                return s.getPrice();
 	} 
 }
 

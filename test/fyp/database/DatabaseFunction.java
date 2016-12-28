@@ -11,7 +11,7 @@ package fyp.database;
  */
 
 import fyp.database.DatabaseConnection;
-import fyp.POI.XLStoDB;
+import fyp.POI.POIFunction;
 import java.util.*;
 import java.util.Date;
 import java.sql.*;
@@ -19,7 +19,7 @@ import java.text.*;
 
 public class DatabaseFunction {
     DatabaseConnection dc = new DatabaseConnection();
-    XLStoDB ap = new XLStoDB();
+    POIFunction ap = new POIFunction();
     
     public boolean insertDPS(String sql){
         float dpsvalue = ap.getDPSValue();

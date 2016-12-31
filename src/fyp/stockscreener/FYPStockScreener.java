@@ -17,7 +17,10 @@ public class FYPStockScreener {
     public static void main(String[] args) {
         // TODO code application logic here
         //new Watchlist().Watchlist();
-        new StockScreener().setVisible(true);
+        new LoadEPS().LoadEPS();
+        new LoadDPS().LoadDPS();
+        //new LoadFCF().LoadFCF();
+        //new StockScreener().setVisible(true);
     }
     
 }

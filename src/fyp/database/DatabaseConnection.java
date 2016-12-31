@@ -86,6 +86,25 @@ public class DatabaseConnection {
 		}	
 		return result;
 	}
+        
+        public double sqlToGetDbl(String sql, String columnName)
+	{
+                double result = -1.0;
+		try
+		{
+			stm = conn.createStatement();
+			rs = stm.executeQuery(sql);
+			if(rs.next()) 
+			{ 
+				result = rs.getDouble(columnName); 
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.print("Error detected: " + e);
+		}	
+		return result;
+	}
 	
 	public String sqlToGetString(String sql, String columnName)
 	{

@@ -42,8 +42,8 @@ public class Watchlist {
         String FileAddress = ("C:/Users/xyi17/Desktop/B.C.S/FYP/FYP-StockScreener/files/Stocklist.xlsx");
         for(int i=1; i<=200; i++){
             try {
-                StockSymbol =poi.poiToGetString(FileAddress, "A"+i);
-                StockCode = poi.poiToGetString(FileAddress, "B"+i);
+                StockSymbol =poi.poiToGetString(FileAddress, "A"+i, 0);
+                StockCode = poi.poiToGetString(FileAddress, "B"+i, 0);
                 df.insertStockDetails(StockSymbol, StockCode);
                 System.out.println(StockSymbol + "&" + StockCode + "Inserted");
             } catch (FileNotFoundException e) {
@@ -55,8 +55,7 @@ public class Watchlist {
     
     public void setStkSymbolList()
     {
-        StkSymbolList = df.getStockSymbolList(StkCode);
-        
+        StkSymbolList = df.getStockSymbolList();
     }
     
     public ArrayList<String> getStkSymbolList()

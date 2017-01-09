@@ -74,7 +74,7 @@ public class Watchlist {
             StkLast = api.getStockLast(StkSbl);
 
             df.updateStockDetails(StkSbl, StkName, StkLow, StkHigh, StkPrev, StkLast);
-            System.out.println(StkSbl + "Updated");
+            System.out.println(StkSbl + " Updated");
         }      
     }
     

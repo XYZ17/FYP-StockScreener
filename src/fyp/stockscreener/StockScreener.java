@@ -9,11 +9,34 @@ package fyp.stockscreener;
  *
  * @author Lim
  */
-public class StockScreener extends javax.swing.JFrame {
+import fyp.database.DatabaseConnection;
+import fyp.database.DatabaseFunction;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.JComboBox;
+import javax.swing.event.*;
+import javax.swing.table.DefaultTableModel;
+public class StockScreener extends javax.swing.JFrame implements MouseListener{
     
+    DatabaseConnection dc = new DatabaseConnection();
+    DatabaseFunction df = new DatabaseFunction();
+    ReadWriteDate rwDate = new ReadWriteDate();
+    
+    private ArrayList<String> StkCodeList = new ArrayList<String>() ;
+    String StkCode = "";
+        
     public StockScreener() {
+        
         initComponents();
+        setStkCodeList();
+        setupAutoComplete(SearchField, StkCodeList);
+        showFATable();
+        SelectedRow();
+ 
     }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -23,11 +46,7 @@ public class StockScreener extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        entityManager0 = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("fyp?zeroDateTimeBehavior=convertToNullPU").createEntityManager();
-        stockQuery = java.beans.Beans.isDesignTime() ? null : entityManager0.createQuery("SELECT s FROM Stock s");
-        stockList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : stockQuery.getResultList();
         jLabel_Find = new javax.swing.JLabel();
         SearchField = new javax.swing.JTextField();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -35,29 +54,31 @@ public class StockScreener extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_FA = new javax.swing.JTable();
         IVPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jLable_IVStkSbl = new javax.swing.JLabel();
+        IVStkSbl = new javax.swing.JLabel();
+        jLable_IVStkCode = new javax.swing.JLabel();
+        IVStkCode = new javax.swing.JLabel();
+        jLable_IVStkName = new javax.swing.JLabel();
+        IVStkName = new javax.swing.JLabel();
+        jLable_IVStkData = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        jLabel_IVPerShare = new javax.swing.JLabel();
+        jLable_IVGGM = new javax.swing.JLabel();
+        IVGGM = new javax.swing.JLabel();
+        jLable_IVDEM = new javax.swing.JLabel();
+        IVDEM = new javax.swing.JLabel();
+        jLable_IVBGF = new javax.swing.JLabel();
+        IVBGF = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel_LastUpdate = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu_File = new javax.swing.JMenu();
-        jMenuItem_File_Save = new javax.swing.JMenuItem();
         jMenuItem_File_Exit = new javax.swing.JMenuItem();
         jMenu_Edit = new javax.swing.JMenu();
-        jMenuItem_ClearAll = new javax.swing.JMenuItem();
         jMenuItem_Refresh = new javax.swing.JMenuItem();
         jMenu_Country = new javax.swing.JMenu();
         jMenuItem_Cty_Msia = new javax.swing.JMenuItem();
-        jMenu_Options = new javax.swing.JMenu();
-        jMenuItem_Options = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,61 +91,35 @@ public class StockScreener extends javax.swing.JFrame {
             }
         });
 
-        jTable_FA.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        jTable_FA.setColumnSelectionAllowed(true);
+        jTable_FA.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, stockList, jTable_FA);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockSymbol}"));
-        columnBinding.setColumnName("Stock Symbol");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockCode}"));
-        columnBinding.setColumnName("Stock Code");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockName}"));
-        columnBinding.setColumnName("Stock Name");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockLow}"));
-        columnBinding.setColumnName("Low");
-        columnBinding.setColumnClass(Float.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockHigh}"));
-        columnBinding.setColumnName("High");
-        columnBinding.setColumnClass(Float.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockPrev}"));
-        columnBinding.setColumnName("Prev");
-        columnBinding.setColumnClass(Float.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockLast}"));
-        columnBinding.setColumnName("Last");
-        columnBinding.setColumnClass(Float.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockBGF}"));
-        columnBinding.setColumnName("BGF");
-        columnBinding.setColumnClass(java.math.BigInteger.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockDCF}"));
-        columnBinding.setColumnName("DCF");
-        columnBinding.setColumnClass(java.math.BigInteger.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockDEM}"));
-        columnBinding.setColumnName("DEM");
-        columnBinding.setColumnClass(java.math.BigInteger.class);
-        columnBinding.setEditable(false);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stockGGM}"));
-        columnBinding.setColumnName("GGM");
-        columnBinding.setColumnClass(java.math.BigInteger.class);
-        columnBinding.setEditable(false);
-        bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();
+            },
+            new String [] {
+                "Stock Symbol", "Stock Code", "Stock Name", "Low", "High", "Prev", "Last", "Benjamin Graham Formula", "Discounted Earning Model", "Gordon Growth Model"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable_FA.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTable_FA.setSelectionBackground(new java.awt.Color(0, 255, 255));
+        jTable_FA.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jScrollPane1.setViewportView(jTable_FA);
-        jTable_FA.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable_FA.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         if (jTable_FA.getColumnModel().getColumnCount() > 0) {
-            jTable_FA.getColumnModel().getColumn(2).setMinWidth(200);
-            jTable_FA.getColumnModel().getColumn(2).setPreferredWidth(200);
+            jTable_FA.getColumnModel().getColumn(0).setResizable(false);
+            jTable_FA.getColumnModel().getColumn(1).setResizable(false);
+            jTable_FA.getColumnModel().getColumn(3).setResizable(false);
+            jTable_FA.getColumnModel().getColumn(4).setResizable(false);
+            jTable_FA.getColumnModel().getColumn(5).setResizable(false);
+            jTable_FA.getColumnModel().getColumn(6).setResizable(false);
+            jTable_FA.getColumnModel().getColumn(9).setResizable(false);
         }
 
         javax.swing.GroupLayout WatchlistPanelLayout = new javax.swing.GroupLayout(WatchlistPanel);
@@ -143,12 +138,17 @@ public class StockScreener extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Stock Watchlist", WatchlistPanel);
 
-        jLabel1.setText("Stock Name   :");
+        jLable_IVStkSbl.setText("Stock Symbol :");
 
-        jLabel2.setText("Stock Symbol :");
+        jLable_IVStkCode.setText("Stock Code    :");
+
+        jLable_IVStkName.setText("Stock Name   :");
+
+        jLable_IVStkData.setText("Stock Data     :");
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null}
             },
             new String [] {
@@ -165,22 +165,23 @@ public class StockScreener extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTable2);
 
-        jLabel3.setText("Stock Data     :");
+        jLabel_IVPerShare.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel_IVPerShare.setText("Intrinsic Value per share : ");
 
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel4.setText("Intrinsic Value per share : ");
+        jLable_IVGGM.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        jLable_IVGGM.setText("Gordon Growth Model         : ");
 
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel5.setText("Gordon Growth Model : ");
+        IVGGM.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel6.setText("Discounted Earings Model : ");
+        jLable_IVDEM.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        jLable_IVDEM.setText("Discounted Earings Model  : ");
 
-        jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel7.setText("DIscounted Cash Flows :");
+        IVDEM.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        jLabel8.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel8.setText("Benjamin Graham Formula : ");
+        jLable_IVBGF.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        jLable_IVBGF.setText("Benjamin Graham Formula : ");
+
+        IVBGF.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout IVPanelLayout = new javax.swing.GroupLayout(IVPanel);
         IVPanel.setLayout(IVPanelLayout);
@@ -192,62 +193,76 @@ public class StockScreener extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1605, Short.MAX_VALUE)
                     .addGroup(IVPanelLayout.createSequentialGroup()
                         .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
                             .addGroup(IVPanelLayout.createSequentialGroup()
                                 .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel5))
-                                .addGap(222, 222, 222)
+                                    .addComponent(jLable_IVGGM)
+                                    .addComponent(jLabel_IVPerShare)
+                                    .addComponent(jLable_IVDEM)
+                                    .addComponent(jLable_IVBGF))
+                                .addGap(41, 41, 41)
                                 .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel8))))
+                                    .addComponent(IVBGF)
+                                    .addComponent(IVDEM)
+                                    .addComponent(IVGGM)))
+                            .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, IVPanelLayout.createSequentialGroup()
+                                    .addComponent(jLable_IVStkSbl, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(IVStkSbl, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, IVPanelLayout.createSequentialGroup()
+                                    .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLable_IVStkName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLable_IVStkData, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(IVStkName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(IVPanelLayout.createSequentialGroup()
+                                .addComponent(jLable_IVStkCode, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(IVStkCode, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         IVPanelLayout.setVerticalGroup(
             IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(IVPanelLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jLabel1)
+                .addGap(19, 19, 19)
+                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLable_IVStkSbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(IVStkSbl, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLable_IVStkCode)
+                    .addComponent(IVStkCode, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLable_IVStkName)
+                    .addComponent(IVStkName, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
+                .addComponent(jLable_IVStkData)
                 .addGap(10, 10, 10)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(56, 56, 56)
-                .addComponent(jLabel4)
+                .addComponent(jLabel_IVPerShare)
                 .addGap(18, 18, 18)
                 .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel7))
-                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(IVPanelLayout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(jLabel6))
-                    .addGroup(IVPanelLayout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addComponent(jLabel8)))
-                .addContainerGap(111, Short.MAX_VALUE))
+                    .addComponent(jLable_IVGGM)
+                    .addComponent(IVGGM))
+                .addGap(28, 28, 28)
+                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLable_IVDEM)
+                    .addComponent(IVDEM))
+                .addGap(32, 32, 32)
+                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLable_IVBGF)
+                    .addComponent(IVBGF))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Intrinsic Value", IVPanel);
 
-        jLabel_LastUpdate.setText("Stock last update : XX:XX AM/PM");
+        jLabel_LastUpdate.setText("Stock last update: " + rwDate.ReadDate());
 
         jMenu_File.setText("File");
-
-        jMenuItem_File_Save.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem_File_Save.setText("Save");
-        jMenuItem_File_Save.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_File_SaveActionPerformed(evt);
-            }
-        });
-        jMenu_File.add(jMenuItem_File_Save);
 
         jMenuItem_File_Exit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         jMenuItem_File_Exit.setText("Exit");
@@ -261,14 +276,6 @@ public class StockScreener extends javax.swing.JFrame {
         jMenuBar1.add(jMenu_File);
 
         jMenu_Edit.setText("Edit");
-
-        jMenuItem_ClearAll.setText("Clear All Stock Record");
-        jMenuItem_ClearAll.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_ClearAllActionPerformed(evt);
-            }
-        });
-        jMenu_Edit.add(jMenuItem_ClearAll);
 
         jMenuItem_Refresh.setText("Refresh Stock Price");
         jMenuItem_Refresh.addActionListener(new java.awt.event.ActionListener() {
@@ -287,18 +294,6 @@ public class StockScreener extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu_Country);
 
-        jMenu_Options.setText("Options");
-
-        jMenuItem_Options.setText("Options...");
-        jMenuItem_Options.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_OptionsActionPerformed(evt);
-            }
-        });
-        jMenu_Options.add(jMenuItem_Options);
-
-        jMenuBar1.add(jMenu_Options);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -315,7 +310,9 @@ public class StockScreener extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(SearchField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel_LastUpdate))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel_LastUpdate)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -334,34 +331,172 @@ public class StockScreener extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        bindingGroup.bind();
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    private void showFATable(){
+        try{
+            String sql = "SELECT * FROM `stock` ORDER BY `Stock_Code` ASC;";
+            dc.stm = dc.conn.createStatement();
+            dc.rs = dc.stm.executeQuery(sql);
+            
+            while(dc.rs.next()){
+                   String Stock_Symbol = dc.rs.getString(1);
+                   String Stock_Code = dc.rs.getString(2);
+                   String Stock_Name = dc.rs.getString(3);
+                   double Stock_Low = dc.rs.getDouble(4);
+                   double Stock_High = dc.rs.getDouble(5);
+                   double Stock_Prev = dc.rs.getDouble(6);
+                   double Stock_Last = dc.rs.getDouble(7);
+                   double Stock_BGF = dc.rs.getDouble(8);
+                   double Stock_DEM = dc.rs.getDouble(9);
+                   double Stock_GGM = dc.rs.getDouble(10);
 
-    private void jMenuItem_File_SaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_File_SaveActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem_File_SaveActionPerformed
+                    Object[] content = {Stock_Symbol, Stock_Code, Stock_Name, Stock_Low, Stock_High, Stock_Prev, Stock_Last, Stock_BGF, Stock_DEM,Stock_GGM};
+                    DefaultTableModel model = (DefaultTableModel) jTable_FA.getModel();
+                    model.addRow(content);
+            }
+        }catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Database Not Connected", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void setStkCodeList()
+    {
+        StkCodeList = df.getStockCodeList();
+    }
+    
+    private ArrayList<String> getStkCodeList()
+    {return StkCodeList;};
+    
+     private static boolean isAdjusting(JComboBox cbInput) {
+        if (cbInput.getClientProperty("is_adjusting") instanceof Boolean) {
+            return (Boolean) cbInput.getClientProperty("is_adjusting");
+        }
+        return false;
+    }
 
+    private static void setAdjusting(JComboBox cbInput, boolean adjusting) {
+        cbInput.putClientProperty("is_adjusting", adjusting);
+    }
+
+    public static void setupAutoComplete(final JTextField SearchField, final ArrayList<String> items) {
+        final DefaultComboBoxModel model = new DefaultComboBoxModel();
+        final JComboBox cbInput = new JComboBox(model) {
+            public Dimension getPreferredSize() {
+                return new Dimension(super.getPreferredSize().width, 0);
+            }
+        };
+        setAdjusting(cbInput, false);
+        for (String item : items) {
+            model.addElement(item);
+        }
+        cbInput.setSelectedItem(null);
+        cbInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!isAdjusting(cbInput)) {
+                    if (cbInput.getSelectedItem() != null) {
+                        SearchField.setText(cbInput.getSelectedItem().toString());
+                    }
+                }
+            }
+        });
+
+        SearchField.addKeyListener(new KeyAdapter() {
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                setAdjusting(cbInput, true);
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    if (cbInput.isPopupVisible()) {
+                        e.setKeyCode(KeyEvent.VK_ENTER);
+                    }
+                }
+                if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    e.setSource(cbInput);
+                    cbInput.dispatchEvent(e);
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        SearchField.setText(cbInput.getSelectedItem().toString());
+                        cbInput.setPopupVisible(false);
+                    }
+                }
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    cbInput.setPopupVisible(false);
+                }
+                setAdjusting(cbInput, false);
+            }
+        });
+        SearchField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                updateList();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                updateList();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                updateList();
+            }
+
+            private void updateList() {
+                setAdjusting(cbInput, true);
+                model.removeAllElements();
+                String input = SearchField.getText();
+                if (!input.isEmpty()) {
+                    for (String item : items) {
+                        if (item.toLowerCase().startsWith(input.toLowerCase())) {
+                            model.addElement(item);
+                        }
+                    }
+                }
+                cbInput.updateUI();
+                cbInput.setPopupVisible(model.getSize() > 0);
+                setAdjusting(cbInput, false);
+            }
+        });
+        SearchField.setLayout(new BorderLayout());
+        SearchField.add(cbInput, BorderLayout.SOUTH);
+    }
+
+    private void SelectedRow(){
+        jTable_FA.addMouseListener
+            (
+                new MouseAdapter()
+                {
+                    public void mouseClicked(MouseEvent e) {
+                        if (e.getClickCount() == 2) {
+                            String StkSymbol = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 0).toString();
+                            String StkCode = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 1).toString();
+                            String StkName = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 2).toString();
+                            String BGFValue = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 7).toString();
+                            String DEMValue = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 8).toString();
+                            String GGMValue = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 9).toString();
+                            IVStkSbl.setText(StkSymbol);
+                            IVStkCode.setText(StkCode);
+                            IVStkName.setText(StkName);
+                            IVBGF.setText("RM " + BGFValue);
+                            IVDEM.setText("RM " + DEMValue);
+                            IVGGM.setText("RM " + GGMValue);
+                            jTabbedPane1.setSelectedIndex(1);
+                        }
+                     }
+                }
+            );
+    }
+    
     private void jMenuItem_File_ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_File_ExitActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jMenuItem_File_ExitActionPerformed
 
     private void SearchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchFieldActionPerformed
-        // TODO add your handling code here:
+           
     }//GEN-LAST:event_SearchFieldActionPerformed
 
-    private void jMenuItem_ClearAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_ClearAllActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem_ClearAllActionPerformed
-
     private void jMenuItem_RefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_RefreshActionPerformed
-        // TODO add your handling code here:
+        new Watchlist().Watchlist();
     }//GEN-LAST:event_jMenuItem_RefreshActionPerformed
-
-    private void jMenuItem_OptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_OptionsActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem_OptionsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -399,39 +534,62 @@ public class StockScreener extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel IVBGF;
+    private javax.swing.JLabel IVDEM;
+    private javax.swing.JLabel IVGGM;
     private javax.swing.JPanel IVPanel;
+    private javax.swing.JLabel IVStkCode;
+    private javax.swing.JLabel IVStkName;
+    private javax.swing.JLabel IVStkSbl;
     private javax.swing.JTextField SearchField;
     private javax.swing.JPanel WatchlistPanel;
-    private javax.persistence.EntityManager entityManager0;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel_Find;
+    private javax.swing.JLabel jLabel_IVPerShare;
     private javax.swing.JLabel jLabel_LastUpdate;
+    private javax.swing.JLabel jLable_IVBGF;
+    private javax.swing.JLabel jLable_IVDEM;
+    private javax.swing.JLabel jLable_IVGGM;
+    private javax.swing.JLabel jLable_IVStkCode;
+    private javax.swing.JLabel jLable_IVStkData;
+    private javax.swing.JLabel jLable_IVStkName;
+    private javax.swing.JLabel jLable_IVStkSbl;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem_ClearAll;
     private javax.swing.JMenuItem jMenuItem_Cty_Msia;
     private javax.swing.JMenuItem jMenuItem_File_Exit;
-    private javax.swing.JMenuItem jMenuItem_File_Save;
-    private javax.swing.JMenuItem jMenuItem_Options;
     private javax.swing.JMenuItem jMenuItem_Refresh;
     private javax.swing.JMenu jMenu_Country;
     private javax.swing.JMenu jMenu_Edit;
     private javax.swing.JMenu jMenu_File;
-    private javax.swing.JMenu jMenu_Options;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable_FA;
-    private java.util.List<fyp.stockscreener.Stock> stockList;
-    private javax.persistence.Query stockQuery;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void mouseClicked(MouseEvent me) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mousePressed(MouseEvent me) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent me) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent me) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseExited(MouseEvent me) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

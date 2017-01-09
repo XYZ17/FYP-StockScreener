@@ -32,12 +32,12 @@ public class LoadDPS {
         POIgetDPS();
     }
     
-    public void setStkCodeList()
+    private void setStkCodeList()
     {
         StkCodeList = df.getStockCodeList();
     }
     
-    public ArrayList<String> getStkCodeList()
+    private ArrayList<String> getStkCodeList()
     {return StkCodeList;};
     
     public void POIgetDPS(){
@@ -49,7 +49,7 @@ public class LoadDPS {
             try {
                 for(char alphabet = 'C'; alphabet <= 'Z'; alphabet++){
                     String CheckYear = poi.poiToGetString(FileAddress, alphabet + "4",1);
-                        if("Last 12M".equals(CheckYear))
+                        if("FY 2016".equals(CheckYear)||"Last 12M".equals(CheckYear)||"Current".equals(CheckYear))
                         {
                             DPSYear = 2016;
                             StkDPS = poi.poiToGetDbl(FileAddress, alphabet + "32",1);
@@ -60,8 +60,10 @@ public class LoadDPS {
                             else{
                                 StkDPS_GR = poi.poiToGetDbl(FileAddress, alphabet + "33",1);
                             }
+                            
                             df.insertStockDPS(StkDPS, DPSYear,StkDPS_GR, StkSbl);
                             System.out.println("DPS for " + StkSbl + " in " + DPSYear + " Inserted");
+                            
                             break;
                         }
                         else if("FY 2016 Est".equals(CheckYear)||"FY 2017 Est".equals(CheckYear)){

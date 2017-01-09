@@ -1,30 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.6" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Component class="javax.persistence.EntityManager" name="entityManager0">
-      <Properties>
-        <Property name="persistenceUnit" type="java.lang.String" value="fyp?zeroDateTimeBehavior=convertToNullPU"/>
-      </Properties>
-    </Component>
-    <Component class="javax.persistence.Query" name="stockQuery">
-      <Properties>
-        <Property name="query" type="java.lang.String" value="SELECT s FROM Stock s"/>
-        <Property name="entityManager" type="java.lang.Object" editor="org.netbeans.modules.form.j2ee.J2EEPropertyModifier$EMProperty$EntityManagerEditor">
-          <ComponentRef name="entityManager0"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="java.util.List" name="stockList">
-      <Properties>
-        <Property name="query" type="java.lang.Object" editor="org.netbeans.modules.form.j2ee.J2EEPropertyModifier$QueryBeanProperty$QueryEditor">
-          <ComponentRef name="stockQuery"/>
-        </Property>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;fyp.stockscreener.Stock&gt;"/>
-      </AuxValues>
-    </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="jMenu_File">
@@ -32,17 +9,6 @@
             <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_File_Save">
-              <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+S"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Save"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_File_SaveActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_File_Exit">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
@@ -61,14 +27,6 @@
             <Property name="text" type="java.lang.String" value="Edit"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_ClearAll">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Clear All Stock Record"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_ClearAllActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_Refresh">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Refresh Stock Price"/>
@@ -88,21 +46,6 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Malaysia"/>
               </Properties>
-            </MenuItem>
-          </SubComponents>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu_Options">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Options"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_Options">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Options..."/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_OptionsActionPerformed"/>
-              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -143,7 +86,10 @@
                       <Component id="SearchField" min="-2" pref="150" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jSeparator1" alignment="1" max="32767" attributes="0"/>
-                  <Component id="jLabel_LastUpdate" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="jLabel_LastUpdate" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -221,10 +167,29 @@
               <SubComponents>
                 <Component class="javax.swing.JTable" name="jTable_FA">
                   <Properties>
+                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                      <Table columnCount="10" rowCount="0">
+                        <Column editable="false" title="Stock Symbol" type="java.lang.Object"/>
+                        <Column editable="false" title="Stock Code" type="java.lang.Object"/>
+                        <Column editable="false" title="Stock Name" type="java.lang.Object"/>
+                        <Column editable="false" title="Low" type="java.lang.Object"/>
+                        <Column editable="false" title="High" type="java.lang.Object"/>
+                        <Column editable="false" title="Prev" type="java.lang.Object"/>
+                        <Column editable="false" title="Last" type="java.lang.Object"/>
+                        <Column editable="false" title="Benjamin Graham Formula" type="java.lang.Object"/>
+                        <Column editable="true" title="Discounted Earning Model" type="java.lang.Object"/>
+                        <Column editable="false" title="Gordon Growth Model" type="java.lang.Object"/>
+                      </Table>
+                    </Property>
                     <Property name="autoResizeMode" type="int" value="4"/>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                      <TableColumnModel selectionModel="1">
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <TableColumnModel selectionModel="3">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
                           <Title/>
                           <Editor/>
                           <Renderer/>
@@ -234,32 +199,22 @@
                           <Editor/>
                           <Renderer/>
                         </Column>
-                        <Column maxWidth="-1" minWidth="200" prefWidth="200" resizable="true">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
                           <Title/>
                           <Editor/>
                           <Renderer/>
                         </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
                           <Title/>
                           <Editor/>
                           <Renderer/>
                         </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
                           <Title/>
                           <Editor/>
                           <Renderer/>
                         </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title/>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title/>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
                           <Title/>
                           <Editor/>
                           <Renderer/>
@@ -274,77 +229,23 @@
                           <Editor/>
                           <Renderer/>
                         </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
                           <Title/>
                           <Editor/>
                           <Renderer/>
                         </Column>
                       </TableColumnModel>
                     </Property>
-                    <Property name="columnSelectionAllowed" type="boolean" value="true"/>
+                    <Property name="selectionBackground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="ff" red="0" type="rgb"/>
+                    </Property>
+                    <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
+                      <JTableSelectionModel selectionMode="2"/>
+                    </Property>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                     </Property>
                   </Properties>
-                  <BindingProperties>
-                    <BindingProperty name="elements" source="stockList" target="jTable_FA" targetPath="elements" updateStrategy="0" immediately="true">
-                      <Subbinding sourcePath="${stockSymbol}">
-                        <BindingParameter name="NAME" value="Stock Symbol"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${stockCode}">
-                        <BindingParameter name="NAME" value="Stock Code"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${stockName}">
-                        <BindingParameter name="NAME" value="Stock Name"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${stockLow}">
-                        <BindingParameter name="NAME" value="Low"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Float.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${stockHigh}">
-                        <BindingParameter name="NAME" value="High"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Float.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${stockPrev}">
-                        <BindingParameter name="NAME" value="Prev"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Float.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${stockLast}">
-                        <BindingParameter name="NAME" value="Last"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Float.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${stockBGF}">
-                        <BindingParameter name="NAME" value="BGF"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigInteger.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${stockDCF}">
-                        <BindingParameter name="NAME" value="DCF"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigInteger.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${stockDEM}">
-                        <BindingParameter name="NAME" value="DEM"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigInteger.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${stockGGM}">
-                        <BindingParameter name="NAME" value="GGM"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.math.BigInteger.class"/>
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
-                      </Subbinding>
-                    </BindingProperty>
-                  </BindingProperties>
                 </Component>
               </SubComponents>
             </Container>
@@ -368,20 +269,39 @@
                           <Component id="jScrollPane2" pref="1605" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jLable_IVGGM" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel_IVPerShare" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLable_IVDEM" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLable_IVBGF" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="IVBGF" min="-2" max="-2" attributes="0"/>
+                                          <Component id="IVDEM" min="-2" max="-2" attributes="0"/>
+                                          <Component id="IVGGM" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="jLable_IVStkSbl" min="-2" pref="89" max="-2" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
+                                          <Component id="IVStkSbl" min="-2" pref="361" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="jLable_IVStkName" max="32767" attributes="0"/>
+                                              <Component id="jLable_IVStkData" pref="89" max="32767" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="IVStkName" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="222" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="jLable_IVStkCode" min="-2" pref="89" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="IVStkCode" min="-2" pref="361" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -394,45 +314,72 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jLable_IVStkSbl" max="32767" attributes="0"/>
+                          <Component id="IVStkSbl" min="-2" pref="14" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="jLable_IVStkCode" min="-2" max="-2" attributes="0"/>
+                          <Component id="IVStkCode" min="-2" pref="14" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLable_IVStkName" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="IVStkName" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLable_IVStkData" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Component id="jScrollPane2" min="-2" pref="164" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
-                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel_IVPerShare" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLable_IVGGM" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="IVGGM" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
-                              <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
-                              <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLable_IVDEM" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="IVDEM" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="111" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLable_IVBGF" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="IVBGF" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="78" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="jLabel1">
+            <Component class="javax.swing.JLabel" name="jLable_IVStkSbl">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Stock Symbol :"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="IVStkSbl">
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLable_IVStkCode">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Stock Code    :"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="IVStkCode">
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLable_IVStkName">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Stock Name   :"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel2">
+            <Component class="javax.swing.JLabel" name="IVStkName">
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLable_IVStkData">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Stock Symbol :"/>
+                <Property name="text" type="java.lang.String" value="Stock Data     :"/>
               </Properties>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane2">
@@ -445,7 +392,7 @@
                 <Component class="javax.swing.JTable" name="jTable2">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="7" rowCount="1">
+                      <Table columnCount="7" rowCount="2">
                         <Column editable="false" title="" type="java.lang.Object"/>
                         <Column editable="false" title="Year 2011" type="java.lang.Object"/>
                         <Column editable="false" title="Year 2012" type="java.lang.Object"/>
@@ -501,12 +448,7 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JLabel" name="jLabel3">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Stock Data     :"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="jLabel4">
+            <Component class="javax.swing.JLabel" name="jLabel_IVPerShare">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="18" style="0"/>
@@ -514,36 +456,49 @@
                 <Property name="text" type="java.lang.String" value="Intrinsic Value per share : "/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel5">
+            <Component class="javax.swing.JLabel" name="jLable_IVGGM">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial Black" size="14" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Gordon Growth Model         : "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="IVGGM">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="14" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Gordon Growth Model : "/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel6">
+            <Component class="javax.swing.JLabel" name="jLable_IVDEM">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial Black" size="14" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Discounted Earings Model  : "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="IVDEM">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="14" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Discounted Earings Model : "/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel7">
+            <Component class="javax.swing.JLabel" name="jLable_IVBGF">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Arial" size="14" style="0"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="DIscounted Cash Flows :"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="jLabel8">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Arial" size="14" style="0"/>
+                  <Font name="Arial Black" size="14" style="0"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Benjamin Graham Formula : "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="IVBGF">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="14" style="0"/>
+                </Property>
               </Properties>
             </Component>
           </SubComponents>
@@ -554,7 +509,9 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel_LastUpdate">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Stock last update : XX:XX AM/PM"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="&quot;Stock last update: &quot; + rwDate.ReadDate()" type="code"/>
+        </Property>
       </Properties>
     </Component>
   </SubComponents>

@@ -33,7 +33,7 @@ public class POIFunction {
      static XSSFCell cell;
      DataFormatter dF = new DataFormatter();
      
-   private void checkNull(Cell c)
+   private void checkNullString(Cell c)
    {
        if(c.getCellType() == Cell.CELL_TYPE_BLANK){
                 c.setCellValue(" ");
@@ -43,9 +43,21 @@ public class POIFunction {
        }
    }
    
-   public double poiToGetDbl(String FileAddress, String CellDetails, int SheetNum) throws FileNotFoundException
+   private void checkNullNumeric(Cell c)
    {
-       double result = -1.0;
+       if(c.getCellType() == Cell.CELL_TYPE_BLANK){
+                c.setCellValue(0.0);
+                
+       }
+       else if(c.getCellType() == Cell.CELL_TYPE_ERROR){
+           System.out.println("ERROR");
+                c.setCellValue(0.0);
+       }
+   }
+   
+   public double poiToGetDbl(String FileAddress, String CellDetails, int SheetNum) throws NullPointerException
+   {
+       double result = 0.0;
          try {
              FileInputStream fis = new FileInputStream(
                      new File(FileAddress));
@@ -57,30 +69,31 @@ public class POIFunction {
              }
              XSSFSheet sheet = wb.getSheetAt(SheetNum);
              FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
-             
-            CellReference cr = new CellReference(CellDetails);
-             Row row = sheet.getRow(cr.getRow());
-             Cell cell = row.getCell(cr.getCol());
-             checkNull(cell);
-             CellValue cellValue = evaluator.evaluate(cell);
-             
-             switch (cellValue.getCellType()) {
-                case Cell.CELL_TYPE_BLANK:
-                    result = 0.0;
-                    break;
+            try{
+                CellReference cr = new CellReference(CellDetails);
+                Row row = sheet.getRow(cr.getRow());
+                Cell cell = row.getCell(cr.getCol());
+                //System.out.println("CELL "+ cell);
+                checkNullNumeric(cell);
+                CellValue cellValue = evaluator.evaluate(cell);
 
-                case Cell.CELL_TYPE_ERROR:
-                    result = 0.0;
-                    break;
-                    
-                case Cell.CELL_TYPE_NUMERIC:
-                    result = cellValue.getNumberValue();
-                    break;
-                    
+                switch (cellValue.getCellType()) {
+                   case Cell.CELL_TYPE_BLANK:
+                       result = 0.0;
+                       break;
+
+                   case Cell.CELL_TYPE_ERROR:
+                       result = 0.0;
+                       break;
+
+                   case Cell.CELL_TYPE_NUMERIC:
+                       result = cellValue.getNumberValue();
+                       break;
+
+               }
+            } catch (NullPointerException n){
+                result = 0.0;
             }
-             
-             result = cellValue.getNumberValue();
-             
              fis.close();
          } catch (IOException e) {
              System.out.print("Error detected: " + e);
@@ -90,7 +103,7 @@ public class POIFunction {
    
    public double poiToGetInt(String FileAddress, String CellDetails, int SheetNum) throws FileNotFoundException
    {
-       double result = -1.0;
+       double result = 0.0;
        
          try {
              FileInputStream fis = new FileInputStream(
@@ -104,10 +117,11 @@ public class POIFunction {
              XSSFSheet sheet = wb.getSheetAt(SheetNum);
              FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
              
-             CellReference cr = new CellReference(CellDetails);
+             try{
+                 CellReference cr = new CellReference(CellDetails);
              Row row = sheet.getRow(cr.getRow());
              Cell cell = row.getCell(cr.getCol());
-             checkNull(cell);
+             checkNullNumeric(cell);
              CellValue cellValue = evaluator.evaluate(cell);
              switch (cellValue.getCellType()) {
                 case Cell.CELL_TYPE_NUMERIC:
@@ -121,6 +135,9 @@ public class POIFunction {
                 case Cell.CELL_TYPE_ERROR:
                     result = 0;
                     break;
+                }
+             }catch (NullPointerException n){
+                result = 0;
             }
              
              fis.close();
@@ -144,11 +161,11 @@ public class POIFunction {
              }
              XSSFSheet sheet = wb.getSheetAt(SheetNum);
              FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
-             
-             CellReference cr = new CellReference(CellDetails);
+             try{
+                 CellReference cr = new CellReference(CellDetails);
              Row row = sheet.getRow(cr.getRow());
              Cell cell = row.getCell(cr.getCol());
-             checkNull(cell);
+             checkNullString(cell);
              CellValue cellValue = evaluator.evaluate(cell);
              
              switch (cellValue.getCellType()) {
@@ -164,7 +181,9 @@ public class POIFunction {
                     result = " ";
                     break;
             }
-             
+            }catch (NullPointerException n){
+                result = " ";
+            }
              fis.close();
          } catch (IOException e) {
              System.out.print("Error detected: " + e);

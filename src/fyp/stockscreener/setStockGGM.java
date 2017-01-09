@@ -12,17 +12,17 @@ import java.util.ArrayList;
  *
  * @author Lim
  */
-public class setStockDEM {
+public class setStockGGM {
     
     DatabaseFunction df = new DatabaseFunction();
     
     private ArrayList<String> StkCodeList = new ArrayList<String>() ;
     private String[] StkSymbol = new String[StkCodeList.size()];
     
-    public void setStockDEM()
+    public void setStockGGM()
     {
         setStkCodeList();
-        DEM();
+        GGM();
     }
     
     public void setStkCodeList()
@@ -33,36 +33,23 @@ public class setStockDEM {
     public ArrayList<String> getStkCodeList()
     {return StkCodeList;};
 
-    public void DEM()
+    public void GGM()
         {
-            double Earnings = 0.0;
-            double EPS_GrowthRate = 0.12;
-            double RiskFreeRate = 0.04;
-            double DiscountRate, DiscountedEarnings;
-            double DEM = 0.0 ;
-            double[] CumulativeEarnings = new double[11];
+            double Dividend = 0.0;
+            double DividendGrowth = 0.0;
+            double RateOfReturn = (3.608/100) + ((4.36/100) * 0.779);
+            double GGM = 0.0 ;
             
             StkSymbol = getStkCodeList().toArray(StkSymbol);
                 
             for(int i=0; i<StkCodeList.size(); i++)
                 {   
                     String StkCd = StkSymbol[i].replaceAll(" ","");
-                    Earnings = df.getEarning(StkCd);
-                    
-                    for(int j=1;j<11;j++){
-                    Earnings *= (1+EPS_GrowthRate);
-                    DiscountRate = 1/(Math.pow((1+RiskFreeRate),j));
-                    DiscountedEarnings = Earnings*DiscountRate;
-                    if(j==1){
-                            CumulativeEarnings[j] = DiscountedEarnings;
-                    }
-                    else{
-                            CumulativeEarnings[j] = DiscountedEarnings + CumulativeEarnings[j-1];
-                    }
-                    }
-                    DEM = CumulativeEarnings[10];
+                    Dividend = df.getDividend(StkCd);
+                    DividendGrowth = (df.getDividendGrowth(StkCd)/100);
+                    GGM = Dividend/(RateOfReturn - DividendGrowth);
 
-                    df.updateStockDEM(StkCd, DEM);
+                    df.updateStockGGM(StkCd, GGM);
                     System.out.println(StkCd + " Updated");
                 }
 

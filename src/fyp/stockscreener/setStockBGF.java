@@ -12,17 +12,16 @@ import java.util.ArrayList;
  *
  * @author Lim
  */
-public class setStockDEM {
-    
+public class setStockBGF {
     DatabaseFunction df = new DatabaseFunction();
     
     private ArrayList<String> StkCodeList = new ArrayList<String>() ;
     private String[] StkSymbol = new String[StkCodeList.size()];
     
-    public void setStockDEM()
+    public void setStockBGF()
     {
         setStkCodeList();
-        DEM();
+        BGF();
     }
     
     public void setStkCodeList()
@@ -33,14 +32,14 @@ public class setStockDEM {
     public ArrayList<String> getStkCodeList()
     {return StkCodeList;};
 
-    public void DEM()
+    public void BGF()
         {
             double Earnings = 0.0;
-            double EPS_GrowthRate = 0.12;
-            double RiskFreeRate = 0.04;
-            double DiscountRate, DiscountedEarnings;
-            double DEM = 0.0 ;
-            double[] CumulativeEarnings = new double[11];
+            double Growth =0.0;
+            double PE = 7;
+            double AvgYieldBond = 4.4;
+            double Bond = 4.82;
+            double BGF = 0.0 ;
             
             StkSymbol = getStkCodeList().toArray(StkSymbol);
                 
@@ -48,21 +47,11 @@ public class setStockDEM {
                 {   
                     String StkCd = StkSymbol[i].replaceAll(" ","");
                     Earnings = df.getEarning(StkCd);
+                    Growth = (df.getGrowth(StkCd))/100;
                     
-                    for(int j=1;j<11;j++){
-                    Earnings *= (1+EPS_GrowthRate);
-                    DiscountRate = 1/(Math.pow((1+RiskFreeRate),j));
-                    DiscountedEarnings = Earnings*DiscountRate;
-                    if(j==1){
-                            CumulativeEarnings[j] = DiscountedEarnings;
-                    }
-                    else{
-                            CumulativeEarnings[j] = DiscountedEarnings + CumulativeEarnings[j-1];
-                    }
-                    }
-                    DEM = CumulativeEarnings[10];
+                    BGF = Math.abs((Earnings*(PE+(1.5*Growth)*AvgYieldBond))/Bond);
 
-                    df.updateStockDEM(StkCd, DEM);
+                    df.updateStockBGF(StkCd, BGF);
                     System.out.println(StkCd + " Updated");
                 }
 

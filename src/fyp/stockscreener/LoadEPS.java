@@ -30,17 +30,17 @@ public class LoadEPS {
         POIgetEPS();
     }
     
-    public void setStkCodeList()
+    private void setStkCodeList()
     {
         StkCodeList = df.getStockCodeList();
     }
     
-    public ArrayList<String> getStkCodeList()
+    private ArrayList<String> getStkCodeList()
     {return StkCodeList;};
     
     public void POIgetEPS(){
         StkSymbol = getStkCodeList().toArray(StkSymbol);
-        for(int i=160; i<StkCodeList.size(); i++)  //i<StkCodeList.size()
+        for(int i=0; i<StkCodeList.size(); i++)  //i<StkCodeList.size()
         {   
             String StkSbl = StkSymbol[i].replaceAll(" ","");
             String FileAddress = ("C:/Users/xyi17/Desktop/B.C.S/FYP/FYP-StockScreener/files/FA/FA_"+ StkSbl + ".xlsx");

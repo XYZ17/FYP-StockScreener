@@ -10,7 +10,7 @@ package fyp.database;
  * @author Lim
  */
 
-import fyp.stockscreener.StockScreener;
+import fyp.stockscreener.Dashboard;
 import java.util.*;
 import java.util.Date;
 import java.sql.*;
@@ -29,19 +29,33 @@ public class DatabaseFunction {
         public ArrayList<String> getStockCodeList()
         {
                 String sqlSelectStockCode = "SELECT Stock_Code FROM `Stock`";    
-                ArrayList<String> StockSymbolList = dc.sqlToGetArrayString(sqlSelectStockCode, "Stock_Code");
-                return StockSymbolList;
+                ArrayList<String> StockCodeList = dc.sqlToGetArrayString(sqlSelectStockCode, "Stock_Code");
+                return StockCodeList;
+        }
+        
+        public ArrayList<Double> getEPSDetails(String Code)
+        {
+                String sqlSelectStockCode = "SELECT EPS_Value, EPS_Year FROM `EarningPerShare` WHERE Stock_Code='" + Code + "';";  
+                ArrayList<Double> EPSDetailsList = dc.sqlToGetArrayDbl(sqlSelectStockCode, "EPS_Value");
+                return EPSDetailsList;
+        }
+        
+        public ArrayList<Double> getDPSDetails(String Code)
+        {
+                String sqlSelectStockCode = "SELECT DPS_Value, DPS_Year FROM `DividendPerShare` WHERE Stock_Code='" + Code + "';";      
+                ArrayList<Double> DPSDetailsList = dc.sqlToGetArrayDbl(sqlSelectStockCode, "EPS_Value");
+                return DPSDetailsList;
         }
         
         public double getEarning(String Code)
         {
-                double result = dc.sqlToGetDbl("SELECT EPS_Value FROM earningpershare WHERE Stock_Code='" + Code + "' AND Year='2016';", "EPS_Value");
+                double result = dc.sqlToGetDbl("SELECT EPS_Value FROM earningpershare WHERE Stock_Code='" + Code + "' AND EPS_Year='2016';", "EPS_Value");
                 return result;
         }
         
         public double getDividend(String Code)
         {
-                double result = dc.sqlToGetDbl("SELECT DPS_Value FROM dividendpershare WHERE Stock_Code='" + Code + "' AND Year='2016';", "DPS_Value");
+                double result = dc.sqlToGetDbl("SELECT DPS_Value FROM dividendpershare WHERE Stock_Code='" + Code + "' AND DPS_Year='2016';", "DPS_Value");
                 return result;
         }
         
@@ -53,7 +67,7 @@ public class DatabaseFunction {
         
         public double getDividendGrowth(String Code)
         {
-                double result = dc.sqlToGetDbl("SELECT DPS_GrowthRate FROM dividendpershare WHERE Stock_Code='" + Code + "' AND Year='2016';", "DPS_GrowthRate");
+                double result = dc.sqlToGetDbl("SELECT DPS_GrowthRate FROM dividendpershare WHERE Stock_Code='" + Code + "' AND DPS_Year='2016';", "DPS_GrowthRate");
                 return result;
         }
         
@@ -77,19 +91,13 @@ public class DatabaseFunction {
 
     public boolean insertStockEPS(double EPS, int Year, String Code )
 	{   
-                String sqlPOIInsertEPS = "INSERT INTO `earningpershare` (`EPS_Value`, `Year`, `Stock_Code`) VALUES (' " + EPS + "', '" + Year + "', '" + Code + "');";
+                String sqlPOIInsertEPS = "INSERT INTO `earningpershare` (`EPS_Value`, `EPS_Year`, `Stock_Code`) VALUES (' " + EPS + "', '" + Year + "', '" + Code + "');";
 		return dc.sqlToInsertUpdateDelete(sqlPOIInsertEPS);
-	}
-    
-    public boolean insertStockFCF(double FCF, int Year, String Code)
-	{   
-                String sqlPOIInsertFCF = "INSERT INTO `freecashflow` (`FCF_Value`, `Year`, `Stock_Code`) VALUES (' " + FCF + "', '" + Year + "', '" + Code + "');";
-		return dc.sqlToInsertUpdateDelete(sqlPOIInsertFCF);
 	}
     
     public boolean insertStockDPS(double DPS, int Year, double DPS_GR, String Code)
 	{   
-                String sqlPOIInsertDPS = "INSERT INTO `dividendpershare` (`DPS_Value`, `Year`, `DPS_GrowthRate`, `Stock_Code`) VALUES (' " + DPS + "', '" + Year + "', '" + DPS_GR + "', '" + Code + "');";
+                String sqlPOIInsertDPS = "INSERT INTO `dividendpershare` (`DPS_Value`, `DPS_Year`, `DPS_GrowthRate`, `Stock_Code`) VALUES (' " + DPS + "', '" + Year + "', '" + DPS_GR + "', '" + Code + "');";
 		return dc.sqlToInsertUpdateDelete(sqlPOIInsertDPS);
 	}
     

@@ -49,7 +49,7 @@ public class setStockBGF {
                     Earnings = df.getEarning(StkCd);
                     Growth = (df.getGrowth(StkCd))/100;
                     
-                    BGF = Math.abs((Earnings*(PE+(1.5*Growth)*AvgYieldBond))/Bond);
+                    BGF = (Earnings*((PE+(1.5*Growth))*AvgYieldBond)/Bond);
 
                     df.updateStockBGF(StkCd, BGF);
                     System.out.println(StkCd + " Updated");

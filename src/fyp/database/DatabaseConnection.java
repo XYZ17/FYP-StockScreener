@@ -162,24 +162,24 @@ public class DatabaseConnection {
 		return arrayListString;
 	}
 	
-	public ArrayList<Integer> sqlToGetArrayInt(String sql, String columnName)
+	public ArrayList<Double> sqlToGetArrayDbl(String sql, String columnName)
 	{
-		ArrayList<Integer> arrayListInt = new ArrayList<Integer>();
-		int result;
+		ArrayList<Double> arrayListDbl = new ArrayList<Double>();
+		double result;
 		try
 		{
 			stm = conn.createStatement();
 			rs = stm.executeQuery(sql);
 			while(rs.next()) 
 			{ 
-				result = rs.getInt(columnName); 
-				arrayListInt.add(result);
+				result = rs.getDouble(columnName); 
+				arrayListDbl.add(result);
 			}
 		}		
 		catch(Exception e)
 		{
 			System.out.print("Error detected: " + e);
 		}	
-		return arrayListInt;
+		return arrayListDbl;
 	}
 }

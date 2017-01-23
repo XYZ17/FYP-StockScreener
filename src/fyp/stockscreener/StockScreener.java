@@ -5,39 +5,32 @@
  */
 package fyp.stockscreener;
 
+import fyp.database.DatabaseConnection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Lim
  */
-import fyp.database.DatabaseConnection;
-import fyp.database.DatabaseFunction;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.JComboBox;
-import javax.swing.event.*;
-import javax.swing.table.DefaultTableModel;
-public class StockScreener extends javax.swing.JFrame implements MouseListener{
+public class StockScreener extends javax.swing.JFrame {
+
+    /**
+     * Creates new form StockScreener
+     */
+    
+    private double Rule_Range = 1.00;
     
     DatabaseConnection dc = new DatabaseConnection();
-    DatabaseFunction df = new DatabaseFunction();
-    ReadWriteDate rwDate = new ReadWriteDate();
     
-    private ArrayList<String> StkCodeList = new ArrayList<String>() ;
-    String StkCode = "";
-        
     public StockScreener() {
-        
         initComponents();
-        setStkCodeList();
-        setupAutoComplete(SearchField, StkCodeList);
-        showFATable();
-        SelectedRow();
- 
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -47,51 +40,20 @@ public class StockScreener extends javax.swing.JFrame implements MouseListener{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel_Find = new javax.swing.JLabel();
-        SearchField = new javax.swing.JTextField();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        WatchlistPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable_FA = new javax.swing.JTable();
-        IVPanel = new javax.swing.JPanel();
-        jLable_IVStkSbl = new javax.swing.JLabel();
-        IVStkSbl = new javax.swing.JLabel();
-        jLable_IVStkCode = new javax.swing.JLabel();
-        IVStkCode = new javax.swing.JLabel();
-        jLable_IVStkName = new javax.swing.JLabel();
-        IVStkName = new javax.swing.JLabel();
-        jLable_IVStkData = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jLabel_IVPerShare = new javax.swing.JLabel();
-        jLable_IVGGM = new javax.swing.JLabel();
-        IVGGM = new javax.swing.JLabel();
-        jLable_IVDEM = new javax.swing.JLabel();
-        IVDEM = new javax.swing.JLabel();
-        jLable_IVBGF = new javax.swing.JLabel();
-        IVBGF = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jLabel_LastUpdate = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu_File = new javax.swing.JMenu();
-        jMenuItem_File_Exit = new javax.swing.JMenuItem();
-        jMenu_Edit = new javax.swing.JMenu();
-        jMenuItem_Refresh = new javax.swing.JMenuItem();
-        jMenu_Country = new javax.swing.JMenu();
-        jMenuItem_Cty_Msia = new javax.swing.JMenuItem();
+        jTable_ScreenerResults = new javax.swing.JTable();
+        jLabel_SelectRule = new javax.swing.JLabel();
+        jComboBox_ScreeningRule = new javax.swing.JComboBox<>();
+        jButton_StartScreening = new javax.swing.JButton();
+        jLabel_ScreeningResults = new javax.swing.JLabel();
+        FoundResultsTotal = new javax.swing.JLabel();
+        jLabel_SelectRule1_Formula = new javax.swing.JLabel();
+        jComboBox_ScreeningRange = new javax.swing.JComboBox<>();
+        jLabel_SelectRule2_Range = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel_Find.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel_Find.setText("Find");
-
-        SearchField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SearchFieldActionPerformed(evt);
-            }
-        });
-
-        jTable_FA.setModel(new javax.swing.table.DefaultTableModel(
+        jTable_ScreenerResults.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -100,243 +62,146 @@ public class StockScreener extends javax.swing.JFrame implements MouseListener{
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, true, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jTable_FA.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        jTable_FA.setSelectionBackground(new java.awt.Color(0, 255, 255));
-        jTable_FA.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        jScrollPane1.setViewportView(jTable_FA);
-        jTable_FA.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        if (jTable_FA.getColumnModel().getColumnCount() > 0) {
-            jTable_FA.getColumnModel().getColumn(0).setResizable(false);
-            jTable_FA.getColumnModel().getColumn(1).setResizable(false);
-            jTable_FA.getColumnModel().getColumn(3).setResizable(false);
-            jTable_FA.getColumnModel().getColumn(4).setResizable(false);
-            jTable_FA.getColumnModel().getColumn(5).setResizable(false);
-            jTable_FA.getColumnModel().getColumn(6).setResizable(false);
-            jTable_FA.getColumnModel().getColumn(9).setResizable(false);
-        }
+        jTable_ScreenerResults.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTable_ScreenerResults.setSelectionBackground(new java.awt.Color(0, 255, 255));
+        jScrollPane1.setViewportView(jTable_ScreenerResults);
+        jTable_ScreenerResults.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
-        javax.swing.GroupLayout WatchlistPanelLayout = new javax.swing.GroupLayout(WatchlistPanel);
-        WatchlistPanel.setLayout(WatchlistPanelLayout);
-        WatchlistPanelLayout.setHorizontalGroup(
-            WatchlistPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-        );
-        WatchlistPanelLayout.setVerticalGroup(
-            WatchlistPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, WatchlistPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(378, 378, 378))
-        );
+        jLabel_SelectRule.setText("Select Screening Rule : ");
 
-        jTabbedPane1.addTab("Stock Watchlist", WatchlistPanel);
-
-        jLable_IVStkSbl.setText("Stock Symbol :");
-
-        jLable_IVStkCode.setText("Stock Code    :");
-
-        jLable_IVStkName.setText("Stock Name   :");
-
-        jLable_IVStkData.setText("Stock Data     :");
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "", "Year 2011", "Year 2012", "Year 2013", "Year 2014", "Year 2015", "Year 2016"
+        jComboBox_ScreeningRule.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ALL", "Benjamin Graham Formula", "Discounted Earning Model", "Gordon Growth Model" }));
+        jComboBox_ScreeningRule.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent e) {
+                    JComboBox jComboBox_ScreeningRule = (JComboBox)e.getSource();
+                    if (jComboBox_ScreeningRule.getSelectedItem().equals("ALL")) {
+                        jComboBox_ScreeningRange.setEnabled(false);
+                    }
+                    else{
+                        jComboBox_ScreeningRange.setEnabled(true);
+                    }
+                }
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, true, true
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane2.setViewportView(jTable2);
-
-        jLabel_IVPerShare.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel_IVPerShare.setText("Intrinsic Value per share : ");
-
-        jLable_IVGGM.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        jLable_IVGGM.setText("Gordon Growth Model         : ");
-
-        IVGGM.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-
-        jLable_IVDEM.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        jLable_IVDEM.setText("Discounted Earings Model  : ");
-
-        IVDEM.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-
-        jLable_IVBGF.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        jLable_IVBGF.setText("Benjamin Graham Formula : ");
-
-        IVBGF.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-
-        javax.swing.GroupLayout IVPanelLayout = new javax.swing.GroupLayout(IVPanel);
-        IVPanel.setLayout(IVPanelLayout);
-        IVPanelLayout.setHorizontalGroup(
-            IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(IVPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1605, Short.MAX_VALUE)
-                    .addGroup(IVPanelLayout.createSequentialGroup()
-                        .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(IVPanelLayout.createSequentialGroup()
-                                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLable_IVGGM)
-                                    .addComponent(jLabel_IVPerShare)
-                                    .addComponent(jLable_IVDEM)
-                                    .addComponent(jLable_IVBGF))
-                                .addGap(41, 41, 41)
-                                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(IVBGF)
-                                    .addComponent(IVDEM)
-                                    .addComponent(IVGGM)))
-                            .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, IVPanelLayout.createSequentialGroup()
-                                    .addComponent(jLable_IVStkSbl, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(IVStkSbl, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, IVPanelLayout.createSequentialGroup()
-                                    .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jLable_IVStkName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLable_IVStkData, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(IVStkName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(IVPanelLayout.createSequentialGroup()
-                                .addComponent(jLable_IVStkCode, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(IVStkCode, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        IVPanelLayout.setVerticalGroup(
-            IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(IVPanelLayout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLable_IVStkSbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(IVStkSbl, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLable_IVStkCode)
-                    .addComponent(IVStkCode, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(8, 8, 8)
-                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLable_IVStkName)
-                    .addComponent(IVStkName, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLable_IVStkData)
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(56, 56, 56)
-                .addComponent(jLabel_IVPerShare)
-                .addGap(18, 18, 18)
-                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLable_IVGGM)
-                    .addComponent(IVGGM))
-                .addGap(28, 28, 28)
-                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLable_IVDEM)
-                    .addComponent(IVDEM))
-                .addGap(32, 32, 32)
-                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLable_IVBGF)
-                    .addComponent(IVBGF))
-                .addContainerGap(78, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Intrinsic Value", IVPanel);
-
-        jLabel_LastUpdate.setText("Stock last update: " + rwDate.ReadDate());
-
-        jMenu_File.setText("File");
-
-        jMenuItem_File_Exit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
-        jMenuItem_File_Exit.setText("Exit");
-        jMenuItem_File_Exit.addActionListener(new java.awt.event.ActionListener() {
+        jButton_StartScreening.setText("Start Screening");
+        jButton_StartScreening.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_File_ExitActionPerformed(evt);
+                jButton_StartScreeningActionPerformed(evt);
             }
         });
-        jMenu_File.add(jMenuItem_File_Exit);
 
-        jMenuBar1.add(jMenu_File);
+        jLabel_ScreeningResults.setText("Results of Screening: ");
 
-        jMenu_Edit.setText("Edit");
+        DefaultTableModel model = (DefaultTableModel) jTable_ScreenerResults.getModel();
+        FoundResultsTotal.setText(" ");
 
-        jMenuItem_Refresh.setText("Refresh Stock Price");
-        jMenuItem_Refresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_RefreshActionPerformed(evt);
+        jLabel_SelectRule1_Formula.setText("Formula used: ");
+
+        jComboBox_ScreeningRange.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Price < Intrinsic Value", "Less than 80%", "Less than 50%", "Less than 20%" }));
+        jComboBox_ScreeningRange.setSelectedItem("Price < Intrinsic Value");
+        jComboBox_ScreeningRange.setEnabled(false);
+        jComboBox_ScreeningRange.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent e) {
+                    JComboBox jComboBox_ScreeningRange = (JComboBox)e.getSource();
+                    switch(jComboBox_ScreeningRange.getSelectedItem().toString())
+                    {
+                        case("Price < Intrinsic Value"):
+                        setRange(1.00);
+                        break;
+                        case("Less than 80%"):
+                        setRange(0.80);
+                        break;
+                        case("Less than 50%"):
+                        setRange(0.50);
+                        break;
+                        case("Less than 20%"):
+                        setRange(0.20);
+                        break;
+                        default:
+                        setRange(1.00);
+                        break;
+                    }
+                }
             }
-        });
-        jMenu_Edit.add(jMenuItem_Refresh);
+        );
 
-        jMenuBar1.add(jMenu_Edit);
-
-        jMenu_Country.setText("Country");
-
-        jMenuItem_Cty_Msia.setText("Malaysia");
-        jMenu_Country.add(jMenuItem_Cty_Msia);
-
-        jMenuBar1.add(jMenu_Country);
-
-        setJMenuBar(jMenuBar1);
+        jLabel_SelectRule2_Range.setText("Range between prices:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 753, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel_SelectRule)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton_StartScreening, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel_Find)
+                        .addComponent(jLabel_SelectRule2_Range)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(SearchField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jComboBox_ScreeningRange, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel_LastUpdate)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel_ScreeningResults)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel_SelectRule1_Formula)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jComboBox_ScreeningRule, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(FoundResultsTotal)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(SearchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel_Find))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 599, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel_LastUpdate)
+                    .addComponent(jLabel_SelectRule)
+                    .addComponent(jButton_StartScreening))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jComboBox_ScreeningRange, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel_SelectRule2_Range))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jComboBox_ScreeningRule, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel_SelectRule1_Formula)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel_ScreeningResults)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(FoundResultsTotal)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void setRange(double Rule_Range){
+        this.Rule_Range = Rule_Range;
+    }
     
-    private void showFATable(){
+    private double getRange(){
+        return Rule_Range;
+    }
+    private void showScreenerTable(String sql){
         try{
-            String sql = "SELECT * FROM `stock` ORDER BY `Stock_Code` ASC;";
             dc.stm = dc.conn.createStatement();
             dc.rs = dc.stm.executeQuery(sql);
             
@@ -353,150 +218,50 @@ public class StockScreener extends javax.swing.JFrame implements MouseListener{
                    double Stock_GGM = dc.rs.getDouble(10);
 
                     Object[] content = {Stock_Symbol, Stock_Code, Stock_Name, Stock_Low, Stock_High, Stock_Prev, Stock_Last, Stock_BGF, Stock_DEM,Stock_GGM};
-                    DefaultTableModel model = (DefaultTableModel) jTable_FA.getModel();
+                    DefaultTableModel model = (DefaultTableModel) jTable_ScreenerResults.getModel();
                     model.addRow(content);
             }
         }catch(Exception e){
-                JOptionPane.showMessageDialog(null, "Database Not Connected", "Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
         }
     }
     
-    private void setStkCodeList()
-    {
-        StkCodeList = df.getStockCodeList();
+    private void UpdateTable(String sql){
+        DefaultTableModel model = (DefaultTableModel) jTable_ScreenerResults.getModel();
+        while(model.getRowCount() >  0){
+            model.setRowCount(0);
+        }
+        showScreenerTable(sql);
+        FoundResultsTotal.setText("Found " + model.getRowCount() + " results.");
     }
     
-    private ArrayList<String> getStkCodeList()
-    {return StkCodeList;};
-    
-     private static boolean isAdjusting(JComboBox cbInput) {
-        if (cbInput.getClientProperty("is_adjusting") instanceof Boolean) {
-            return (Boolean) cbInput.getClientProperty("is_adjusting");
-        }
-        return false;
-    }
-
-    private static void setAdjusting(JComboBox cbInput, boolean adjusting) {
-        cbInput.putClientProperty("is_adjusting", adjusting);
-    }
-
-    public static void setupAutoComplete(final JTextField SearchField, final ArrayList<String> items) {
-        final DefaultComboBoxModel model = new DefaultComboBoxModel();
-        final JComboBox cbInput = new JComboBox(model) {
-            public Dimension getPreferredSize() {
-                return new Dimension(super.getPreferredSize().width, 0);
-            }
-        };
-        setAdjusting(cbInput, false);
-        for (String item : items) {
-            model.addElement(item);
-        }
-        cbInput.setSelectedItem(null);
-        cbInput.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!isAdjusting(cbInput)) {
-                    if (cbInput.getSelectedItem() != null) {
-                        SearchField.setText(cbInput.getSelectedItem().toString());
-                    }
-                }
-            }
-        });
-
-        SearchField.addKeyListener(new KeyAdapter() {
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                setAdjusting(cbInput, true);
-                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    if (cbInput.isPopupVisible()) {
-                        e.setKeyCode(KeyEvent.VK_ENTER);
-                    }
-                }
-                if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    e.setSource(cbInput);
-                    cbInput.dispatchEvent(e);
-                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        SearchField.setText(cbInput.getSelectedItem().toString());
-                        cbInput.setPopupVisible(false);
-                    }
-                }
-                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    cbInput.setPopupVisible(false);
-                }
-                setAdjusting(cbInput, false);
-            }
-        });
-        SearchField.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {
-                updateList();
-            }
-
-            public void removeUpdate(DocumentEvent e) {
-                updateList();
-            }
-
-            public void changedUpdate(DocumentEvent e) {
-                updateList();
-            }
-
-            private void updateList() {
-                setAdjusting(cbInput, true);
-                model.removeAllElements();
-                String input = SearchField.getText();
-                if (!input.isEmpty()) {
-                    for (String item : items) {
-                        if (item.toLowerCase().startsWith(input.toLowerCase())) {
-                            model.addElement(item);
-                        }
-                    }
-                }
-                cbInput.updateUI();
-                cbInput.setPopupVisible(model.getSize() > 0);
-                setAdjusting(cbInput, false);
-            }
-        });
-        SearchField.setLayout(new BorderLayout());
-        SearchField.add(cbInput, BorderLayout.SOUTH);
-    }
-
-    private void SelectedRow(){
-        jTable_FA.addMouseListener
-            (
-                new MouseAdapter()
+    private void jButton_StartScreeningActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_StartScreeningActionPerformed
+        if(jButton_StartScreening == evt.getSource()) {
+		String Rule_Formula = jComboBox_ScreeningRule.getSelectedItem().toString();
+		String Rule_Range = jComboBox_ScreeningRange.getSelectedItem().toString();
+                String sql = "";
+                if(Rule_Formula == "ALL")
                 {
-                    public void mouseClicked(MouseEvent e) {
-                        if (e.getClickCount() == 2) {
-                            String StkSymbol = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 0).toString();
-                            String StkCode = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 1).toString();
-                            String StkName = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 2).toString();
-                            String BGFValue = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 7).toString();
-                            String DEMValue = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 8).toString();
-                            String GGMValue = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 9).toString();
-                            IVStkSbl.setText(StkSymbol);
-                            IVStkCode.setText(StkCode);
-                            IVStkName.setText(StkName);
-                            IVBGF.setText("RM " + BGFValue);
-                            IVDEM.setText("RM " + DEMValue);
-                            IVGGM.setText("RM " + GGMValue);
-                            jTabbedPane1.setSelectedIndex(1);
-                        }
-                     }
+                    sql = "SELECT * FROM `stock` WHERE `Stock_Last` < `Stock_BGF` AND `Stock_Last` < `Stock_DEM` OR `Stock_Last` <  `Stock_GGM`";
                 }
-            );
-    }
-    
-    private void jMenuItem_File_ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_File_ExitActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_jMenuItem_File_ExitActionPerformed
-
-    private void SearchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchFieldActionPerformed
-           
-    }//GEN-LAST:event_SearchFieldActionPerformed
-
-    private void jMenuItem_RefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_RefreshActionPerformed
-        new Watchlist().Watchlist();
-    }//GEN-LAST:event_jMenuItem_RefreshActionPerformed
+                else
+                {
+                    switch(Rule_Formula)
+                    {
+                        case "Benjamin Graham Formula":
+                             sql = "SELECT * FROM `stock` WHERE `Stock_Last` < (" + getRange() + " * Stock_BGF);";
+                             break;
+                        case "Discounted Earning Model": 
+                             sql = "SELECT * FROM `stock` WHERE `Stock_Last` < (" + getRange() + " * Stock_DEM);";
+                             break;
+                        case "Gordon Growth Model":
+                             sql = "SELECT * FROM `stock` WHERE `Stock_Last` < (" + getRange() + " * Stock_GGM);";
+                             break;
+                    }
+                }
+                UpdateTable(sql);
+	}
+    }//GEN-LAST:event_jButton_StartScreeningActionPerformed
 
     /**
      * @param args the command line arguments
@@ -534,62 +299,15 @@ public class StockScreener extends javax.swing.JFrame implements MouseListener{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel IVBGF;
-    private javax.swing.JLabel IVDEM;
-    private javax.swing.JLabel IVGGM;
-    private javax.swing.JPanel IVPanel;
-    private javax.swing.JLabel IVStkCode;
-    private javax.swing.JLabel IVStkName;
-    private javax.swing.JLabel IVStkSbl;
-    private javax.swing.JTextField SearchField;
-    private javax.swing.JPanel WatchlistPanel;
-    private javax.swing.JLabel jLabel_Find;
-    private javax.swing.JLabel jLabel_IVPerShare;
-    private javax.swing.JLabel jLabel_LastUpdate;
-    private javax.swing.JLabel jLable_IVBGF;
-    private javax.swing.JLabel jLable_IVDEM;
-    private javax.swing.JLabel jLable_IVGGM;
-    private javax.swing.JLabel jLable_IVStkCode;
-    private javax.swing.JLabel jLable_IVStkData;
-    private javax.swing.JLabel jLable_IVStkName;
-    private javax.swing.JLabel jLable_IVStkSbl;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem_Cty_Msia;
-    private javax.swing.JMenuItem jMenuItem_File_Exit;
-    private javax.swing.JMenuItem jMenuItem_Refresh;
-    private javax.swing.JMenu jMenu_Country;
-    private javax.swing.JMenu jMenu_Edit;
-    private javax.swing.JMenu jMenu_File;
+    private javax.swing.JLabel FoundResultsTotal;
+    private javax.swing.JButton jButton_StartScreening;
+    private javax.swing.JComboBox<String> jComboBox_ScreeningRange;
+    private javax.swing.JComboBox<String> jComboBox_ScreeningRule;
+    private javax.swing.JLabel jLabel_ScreeningResults;
+    private javax.swing.JLabel jLabel_SelectRule;
+    private javax.swing.JLabel jLabel_SelectRule1_Formula;
+    private javax.swing.JLabel jLabel_SelectRule2_Range;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable_FA;
+    private javax.swing.JTable jTable_ScreenerResults;
     // End of variables declaration//GEN-END:variables
-
-    @Override
-    public void mouseClicked(MouseEvent me) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void mousePressed(MouseEvent me) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent me) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent me) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void mouseExited(MouseEvent me) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

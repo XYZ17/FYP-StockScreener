@@ -64,7 +64,7 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
         IVStkName = new javax.swing.JLabel();
         jLable_IVStkData = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jTable_IVDetails = new javax.swing.JTable();
         jLabel_IVPerShare = new javax.swing.JLabel();
         jLable_IVGGM = new javax.swing.JLabel();
         IVGGM = new javax.swing.JLabel();
@@ -112,6 +112,7 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
             }
         });
         jTable_FA.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTable_FA.setColumnSelectionAllowed(true);
         jTable_FA.setSelectionBackground(new java.awt.Color(0, 255, 255));
         jTable_FA.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jScrollPane1.setViewportView(jTable_FA);
@@ -144,32 +145,37 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
 
         jTabbedPane1.addTab("Stock Watchlist", WatchlistPanel);
 
-        jLable_IVStkSbl.setText("Stock Symbol :");
+        jLable_IVStkSbl.setText("Stock Symbol  :");
 
-        jLable_IVStkCode.setText("Stock Code    :");
+        jLable_IVStkCode.setText("Stock Code     :");
 
-        jLable_IVStkName.setText("Stock Name   :");
+        jLable_IVStkName.setText("Stock Name    :");
 
-        jLable_IVStkData.setText("Stock Data     :");
+        jLable_IVStkData.setText("Stock Data      :");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jTable_IVDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"Dividend Per Share", null, null, null, null, null, null},
-                {"Earning Per Share", null, null, null, null, null, null}
+
             },
             new String [] {
-                "", "Year 2011", "Year 2012", "Year 2013", "Year 2014", "Year 2015", "Year 2016"
+                "Year", "Dividend Per Share", "Dividend Growth Rate", "Earning Per Share"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, true, true
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable2);
+        jTable_IVDetails.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(jTable_IVDetails);
+        if (jTable_IVDetails.getColumnModel().getColumnCount() > 0) {
+            jTable_IVDetails.getColumnModel().getColumn(0).setResizable(false);
+            jTable_IVDetails.getColumnModel().getColumn(1).setResizable(false);
+            jTable_IVDetails.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         jLabel_IVPerShare.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel_IVPerShare.setText("Intrinsic Value per share : ");
@@ -180,12 +186,12 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
         IVGGM.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         jLable_IVDEM.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        jLable_IVDEM.setText("Discounted Earings Model  : ");
+        jLable_IVDEM.setText("Discounted Earings Model   : ");
 
         IVDEM.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         jLable_IVBGF.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        jLable_IVBGF.setText("Benjamin Graham Formula : ");
+        jLable_IVBGF.setText("Benjamin Graham Formula   : ");
 
         IVBGF.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
@@ -246,22 +252,22 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLable_IVStkData)
                 .addGap(10, 10, 10)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(56, 56, 56)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel_IVPerShare)
                 .addGap(18, 18, 18)
                 .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLable_IVGGM)
-                    .addComponent(IVGGM))
-                .addGap(28, 28, 28)
+                    .addComponent(jLable_IVBGF)
+                    .addComponent(IVBGF))
+                .addGap(50, 50, 50)
                 .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLable_IVDEM)
                     .addComponent(IVDEM))
-                .addGap(32, 32, 32)
+                .addGap(45, 45, 45)
                 .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLable_IVBGF)
-                    .addComponent(IVBGF))
-                .addContainerGap(78, Short.MAX_VALUE))
+                    .addComponent(jLable_IVGGM)
+                    .addComponent(IVGGM))
+                .addContainerGap(122, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Intrinsic Value", IVPanel);
@@ -374,6 +380,35 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
                 JOptionPane.showMessageDialog(null, "Database not connected. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
                 System.exit(0);
         }
+    }
+    
+    private void showDetailsTable(String sql){
+        try{
+            dc.stm = dc.conn.createStatement();
+            dc.rs = dc.stm.executeQuery(sql);
+            
+            while(dc.rs.next()){
+                   String Year = dc.rs.getString(1);
+                   double DividendPerShare = dc.rs.getDouble(2);
+                   double DividendGrowth = dc.rs.getDouble(3);
+                   double EearningPerShare = dc.rs.getDouble(4);
+
+                    Object[] content = {Year, DividendPerShare, DividendGrowth,EearningPerShare};
+                    DefaultTableModel model = (DefaultTableModel) jTable_IVDetails.getModel();
+                    model.addRow(content);
+            }
+        }catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Database not connected. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                System.exit(0);
+        }
+    }
+    
+    private void UpdateDetailsTable(String sql){
+        DefaultTableModel model = (DefaultTableModel) jTable_IVDetails.getModel();
+        while(model.getRowCount() >  0){
+            model.setRowCount(0);
+        }
+        showDetailsTable(sql);
     }
     
     private void setStkCodeList()
@@ -493,17 +528,43 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
                             String BGFValue = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 7).toString();
                             String DEMValue = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 8).toString();
                             String GGMValue = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 9).toString();
+                            
+                            String sql = "SELECT dps.DPS_Year, dps.DPS_Value, dps.DPS_GrowthRate, eps.EPS_Value FROM dividendpershare dps LEFT JOIN earningpershare eps ON dps.Stock_Code = eps.Stock_Code AND dps.DPS_Year = eps.EPS_Year WHERE dps.Stock_Code = '" + StkCode + "' AND eps.Stock_Code = '" + StkCode + "' LIMIT 6";
                             IVStkSbl.setText(StkSymbol);
                             IVStkCode.setText(StkCode);
                             IVStkName.setText(StkName);
-                            /*
                             if(Double.parseDouble(BGFValue) < 0.0)
                             {
+                                IVBGF.setForeground(Color.red);
+                                IVBGF.setText("MYR " + BGFValue);
+                            }
+                            else
+                            {   
+                                IVBGF.setForeground(Color.black);
+                                IVBGF.setText("MYR " + BGFValue);
+                            }
+                            if(Double.parseDouble(DEMValue) < 0.0)
+                            {
                                 IVDEM.setForeground(Color.red);
-                            } */
-                            IVBGF.setText("RM " + BGFValue);
-                            IVDEM.setText("RM " + DEMValue);
-                            IVGGM.setText("RM " + GGMValue);
+                                IVDEM.setText("MYR " + DEMValue);
+                            }
+                            else
+                            {   
+                                IVDEM.setForeground(Color.black);
+                                IVDEM.setText("MYR " + DEMValue);
+                            }
+                            
+                            if(Double.parseDouble(GGMValue) < 0.0)
+                            {
+                                IVGGM.setForeground(Color.red);
+                                IVGGM.setText("MYR " + GGMValue);
+                            }
+                            else
+                            {   
+                                IVGGM.setForeground(Color.black);
+                                IVGGM.setText("MYR " + GGMValue);
+                            }
+                            UpdateDetailsTable(sql);
                             jTabbedPane1.setEnabledAt(1,true);
                             jTabbedPane1.setSelectedIndex(1);
                         }
@@ -606,8 +667,8 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable_FA;
+    private javax.swing.JTable jTable_IVDetails;
     // End of variables declaration//GEN-END:variables
 
     @Override

@@ -52,6 +52,7 @@ public class StockScreener extends javax.swing.JFrame {
         jLabel_SelectRule2_Range = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jTable_ScreenerResults.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

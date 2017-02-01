@@ -8,27 +8,29 @@ package fyp.stockscreener;
 import fyp.database.DatabaseConnection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Lim
  */
-public class StockScreener extends javax.swing.JFrame {
+public class StockScreener extends javax.swing.JFrame implements MouseListener{
 
     /**
      * Creates new form StockScreener
      */
-    
+    Dashboard dashboard = new Dashboard();
     private double Rule_Range = 1.00;
     
     DatabaseConnection dc = new DatabaseConnection();
     
     public StockScreener() {
         initComponents();
+        SelectedRow();
     }
 
     /**
@@ -264,6 +266,28 @@ public class StockScreener extends javax.swing.JFrame {
 	}
     }//GEN-LAST:event_jButton_StartScreeningActionPerformed
 
+    private void SelectedRow(){
+        jTable_ScreenerResults.addMouseListener
+            (
+                new MouseAdapter()
+                {
+                    public void mouseClicked(MouseEvent e) {
+                        if (e.getClickCount() == 2) {
+                            String StkSymbol = jTable_ScreenerResults.getValueAt(jTable_ScreenerResults.getSelectedRow(), 0).toString();
+                            String StkCode = jTable_ScreenerResults.getValueAt(jTable_ScreenerResults.getSelectedRow(), 1).toString();
+                            String StkName = jTable_ScreenerResults.getValueAt(jTable_ScreenerResults.getSelectedRow(), 2).toString();
+                            String BGFValue = jTable_ScreenerResults.getValueAt(jTable_ScreenerResults.getSelectedRow(), 7).toString();
+                            String DEMValue = jTable_ScreenerResults.getValueAt(jTable_ScreenerResults.getSelectedRow(), 8).toString();
+                            String GGMValue = jTable_ScreenerResults.getValueAt(jTable_ScreenerResults.getSelectedRow(), 9).toString();
+                            
+                            String sql = "SELECT dps.DPS_Year, dps.DPS_Value, dps.DPS_GrowthRate, eps.EPS_Value FROM dividendpershare dps LEFT JOIN earningpershare eps ON dps.Stock_Code = eps.Stock_Code AND dps.DPS_Year = eps.EPS_Year WHERE dps.Stock_Code = '" + StkCode + "' AND eps.Stock_Code = '" + StkCode + "' LIMIT 6";
+                            dashboard.ScreenerToIVPanel(StkSymbol,StkCode,StkName,BGFValue,DEMValue,GGMValue,sql);
+                        }
+                     }
+                }
+            );
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -311,4 +335,29 @@ public class StockScreener extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable_ScreenerResults;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void mouseClicked(MouseEvent me) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mousePressed(MouseEvent me) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent me) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent me) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseExited(MouseEvent me) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

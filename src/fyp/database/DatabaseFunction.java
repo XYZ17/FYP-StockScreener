@@ -10,11 +10,7 @@ package fyp.database;
  * @author Lim
  */
 
-import fyp.stockscreener.Dashboard;
 import java.util.*;
-import java.util.Date;
-import java.sql.*;
-import java.text.*;
 
 public class DatabaseFunction {
     DatabaseConnection dc = new DatabaseConnection();
@@ -55,7 +51,7 @@ public class DatabaseFunction {
         
         public double getDividend(String Code)
         {
-                double result = dc.sqlToGetDbl("SELECT DPS_Value FROM dividendpershare WHERE Stock_Code='" + Code + "' AND DPS_Year='2016';", "DPS_Value");
+                double result = dc.sqlToGetDbl("SELECT DPS_Value FROM dividendpershare WHERE Stock_Code='" + Code + "' AND DPS_Year='2015';", "DPS_Value");
                 return result;
         }
         
@@ -99,6 +95,30 @@ public class DatabaseFunction {
 	{   
                 String sqlPOIInsertDPS = "INSERT INTO `dividendpershare` (`DPS_Value`, `DPS_Year`, `DPS_GrowthRate`, `Stock_Code`) VALUES (' " + DPS + "', '" + Year + "', '" + DPS_GR + "', '" + Code + "');";
 		return dc.sqlToInsertUpdateDelete(sqlPOIInsertDPS);
+	}
+    
+    public boolean insertStockFCF(double FCF, int Year, String Code)
+	{   
+                String sqlPOIInsertFCF = "INSERT INTO `freecashflow` (`FCF_Value`, `FCF_Year`, `Stock_Code`) VALUES (' " + FCF + "', '" + Year + "', '" + Code + "');";
+		return dc.sqlToInsertUpdateDelete(sqlPOIInsertFCF);
+	}
+    
+    public boolean insertStockRevenue(double Revenue, int Year, String Code)
+	{   
+                String sqlPOIInsertRevenue = "INSERT INTO `revenue` (`Revenue_Value`, `Revenue_Year`, `Stock_Code`) VALUES (' " + Revenue + "', '" + Year + "', '" + Code + "');";
+		return dc.sqlToInsertUpdateDelete(sqlPOIInsertRevenue);
+	}
+    
+     public boolean insertStockNetIncome(double NetIncome, int Year, String Code)
+	{   
+                String sqlPOIInsertRevenue = "INSERT INTO `netincome` (`NetIncome_Value`, `NetIncome_Year`, `Stock_Code`) VALUES (' " + NetIncome + "', '" + Year + "', '" + Code + "');";
+		return dc.sqlToInsertUpdateDelete(sqlPOIInsertRevenue);
+	}
+     
+     public boolean insertStockGrossProfit(double GrossProfit, int Year, String Code)
+	{   
+                String sqlPOIInsertRevenue = "INSERT INTO `grossprofit` (`GProfit_Value`, `GProfit_Year`, `Stock_Code`) VALUES (' " + GrossProfit + "', '" + Year + "', '" + Code + "');";
+		return dc.sqlToInsertUpdateDelete(sqlPOIInsertRevenue);
 	}
     
     public boolean updateStockDetails(String Symbol, String Name, double Low, double High, double Prev, double Last)

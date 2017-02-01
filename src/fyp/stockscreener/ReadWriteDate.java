@@ -14,10 +14,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -73,11 +71,11 @@ public class ReadWriteDate {
         Date newDate = new Date();
         String CurrentDate = sdf.format(newDate);
         
-        if(WriteDate == CurrentDate){
-            return false;
+        if(WriteDate.equals(CurrentDate)){
+            return true;
         }
         else{
-            return true;
+            return false;
         }
     }
 }

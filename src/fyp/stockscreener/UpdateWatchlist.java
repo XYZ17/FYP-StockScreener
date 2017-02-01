@@ -7,22 +7,18 @@ package fyp.stockscreener;
 
 import fyp.database.DatabaseFunction;
 import fyp.POI.POIFunction;
-import fyp.yahooapi.StockDetailsAPI;
-import fyp.yahooapi.StockFetcherAPI;
 import fyp.yahooapi.StockLoadAPI;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Lim
  */
-public class Watchlist {
+public class UpdateWatchlist {
     DatabaseFunction df = new DatabaseFunction();
     POIFunction poi = new POIFunction();
     StockLoadAPI api = new StockLoadAPI();
+    UpdateSplash upSplash = new UpdateSplash();
     
     private ArrayList<String> StkSymbolList = new ArrayList<String>() ;
     private String[] StkSymbol = new String[StkSymbolList.size()];
@@ -34,7 +30,7 @@ public class Watchlist {
     private double StkLast = 0 ;
     private double StkGrowth = 0 ;
     
-    public void Watchlist(){
+    public void UpdateWatchlist(){
         
         setStkSymbolList();
         setStkDetails();
@@ -64,6 +60,7 @@ public class Watchlist {
     public void setStkDetails()
     {
         StkSymbol = getStkSymbolList().toArray(StkSymbol);
+        new UpdateSplash().setVisible(true);
         for(int i=0; i<StkSymbolList.size(); i++)
         {   
             String StkSbl = StkSymbol[i].replaceAll(" ","");
@@ -73,8 +70,9 @@ public class Watchlist {
             StkPrev = api.getStockPrev(StkSbl);
             StkLast = api.getStockLast(StkSbl);
 
-            df.updateStockDetails(StkSbl, StkName, StkLow, StkHigh, StkPrev, StkLast);
+            //df.updateStockDetails(StkSbl, StkName, StkLow, StkHigh, StkPrev, StkLast);
             System.out.println(StkSbl + " Updated");
+            upSplash.getWatchlistProgress();
         }      
     }
     

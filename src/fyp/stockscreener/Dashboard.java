@@ -13,12 +13,14 @@ import fyp.database.DatabaseConnection;
 import fyp.database.DatabaseFunction;
 import java.awt.*;
 import java.awt.event.*;
+import static java.lang.Math.abs;
+import java.text.DecimalFormat;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.JComboBox;
 import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
-public class Dashboard extends javax.swing.JFrame implements MouseListener{
+public class Dashboard extends javax.swing.JFrame implements MouseListener,ActionListener{
     
     DatabaseConnection dc = new DatabaseConnection();
     DatabaseFunction df = new DatabaseFunction();
@@ -68,10 +70,15 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
         jLabel_IVPerShare = new javax.swing.JLabel();
         jLable_IVGGM = new javax.swing.JLabel();
         IVGGM = new javax.swing.JLabel();
+        Compare_GGM = new javax.swing.JLabel();
         jLable_IVDEM = new javax.swing.JLabel();
         IVDEM = new javax.swing.JLabel();
+        Compare_DEM = new javax.swing.JLabel();
         jLable_IVBGF = new javax.swing.JLabel();
         IVBGF = new javax.swing.JLabel();
+        Compare_BGF = new javax.swing.JLabel();
+        jLabel_LatestPrice = new javax.swing.JLabel();
+        LatestPrice = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel_LastUpdate = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -112,7 +119,6 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
             }
         });
         jTable_FA.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        jTable_FA.setColumnSelectionAllowed(true);
         jTable_FA.setSelectionBackground(new java.awt.Color(0, 255, 255));
         jTable_FA.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jScrollPane1.setViewportView(jTable_FA);
@@ -158,11 +164,11 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
 
             },
             new String [] {
-                "Year", "Dividend Per Share", "Dividend Growth Rate", "Earning Per Share"
+                "Year", "Dividend Per Share", "Dividend Growth Rate", "Earning Per Share", "Revenue", "Net Income", "Gross Profit", "Free Cash Flow"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -175,9 +181,13 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
             jTable_IVDetails.getColumnModel().getColumn(0).setResizable(false);
             jTable_IVDetails.getColumnModel().getColumn(1).setResizable(false);
             jTable_IVDetails.getColumnModel().getColumn(2).setResizable(false);
+            jTable_IVDetails.getColumnModel().getColumn(4).setResizable(false);
+            jTable_IVDetails.getColumnModel().getColumn(5).setResizable(false);
+            jTable_IVDetails.getColumnModel().getColumn(6).setResizable(false);
+            jTable_IVDetails.getColumnModel().getColumn(7).setResizable(false);
         }
 
-        jLabel_IVPerShare.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel_IVPerShare.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         jLabel_IVPerShare.setText("Intrinsic Value per share : ");
 
         jLable_IVGGM.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
@@ -185,15 +195,26 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
 
         IVGGM.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
+        Compare_GGM.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+
         jLable_IVDEM.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jLable_IVDEM.setText("Discounted Earings Model   : ");
 
         IVDEM.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
+        Compare_DEM.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+
         jLable_IVBGF.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jLable_IVBGF.setText("Benjamin Graham Formula   : ");
 
         IVBGF.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+
+        Compare_BGF.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+
+        jLabel_LatestPrice.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        jLabel_LatestPrice.setText("Latest Price                     :  MYR");
+
+        LatestPrice.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
 
         javax.swing.GroupLayout IVPanelLayout = new javax.swing.GroupLayout(IVPanel);
         IVPanel.setLayout(IVPanelLayout);
@@ -205,17 +226,6 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1605, Short.MAX_VALUE)
                     .addGroup(IVPanelLayout.createSequentialGroup()
                         .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(IVPanelLayout.createSequentialGroup()
-                                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLable_IVGGM)
-                                    .addComponent(jLabel_IVPerShare)
-                                    .addComponent(jLable_IVDEM)
-                                    .addComponent(jLable_IVBGF))
-                                .addGap(41, 41, 41)
-                                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(IVBGF)
-                                    .addComponent(IVDEM)
-                                    .addComponent(IVGGM)))
                             .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, IVPanelLayout.createSequentialGroup()
                                     .addComponent(jLable_IVStkSbl, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -230,7 +240,30 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
                             .addGroup(IVPanelLayout.createSequentialGroup()
                                 .addComponent(jLable_IVStkCode, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(IVStkCode, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(IVStkCode, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel_IVPerShare)
+                            .addGroup(IVPanelLayout.createSequentialGroup()
+                                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel_LatestPrice, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLable_IVGGM, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLable_IVDEM, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLable_IVBGF, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(IVPanelLayout.createSequentialGroup()
+                                        .addGap(41, 41, 41)
+                                        .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(IVDEM)
+                                            .addComponent(IVGGM)
+                                            .addGroup(IVPanelLayout.createSequentialGroup()
+                                                .addComponent(IVBGF)
+                                                .addGap(169, 169, 169)
+                                                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(Compare_DEM)
+                                                    .addComponent(Compare_GGM)
+                                                    .addComponent(Compare_BGF)))))
+                                    .addGroup(IVPanelLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(LatestPrice)))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -254,20 +287,27 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
                 .addGap(10, 10, 10)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel_LatestPrice)
+                    .addComponent(LatestPrice))
+                .addGap(15, 15, 15)
                 .addComponent(jLabel_IVPerShare)
                 .addGap(18, 18, 18)
                 .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLable_IVBGF)
-                    .addComponent(IVBGF))
-                .addGap(50, 50, 50)
-                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLable_IVDEM)
-                    .addComponent(IVDEM))
+                    .addComponent(IVBGF)
+                    .addComponent(Compare_GGM))
                 .addGap(45, 45, 45)
                 .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLable_IVDEM)
+                    .addComponent(IVDEM)
+                    .addComponent(Compare_DEM))
+                .addGap(50, 50, 50)
+                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLable_IVGGM)
-                    .addComponent(IVGGM))
-                .addContainerGap(122, Short.MAX_VALUE))
+                    .addComponent(IVGGM)
+                    .addComponent(Compare_BGF))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Intrinsic Value", IVPanel);
@@ -391,9 +431,13 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
                    String Year = dc.rs.getString(1);
                    double DividendPerShare = dc.rs.getDouble(2);
                    double DividendGrowth = dc.rs.getDouble(3);
-                   double EearningPerShare = dc.rs.getDouble(4);
+                   double EarningPerShare = dc.rs.getDouble(4);
+                   double Revenue = dc.rs.getDouble(5);
+                   double NetIncome = dc.rs.getDouble(6);
+                   double GrossProfit = dc.rs.getDouble(7);
+                   double FreeCashFlow = dc.rs.getDouble(8);
 
-                    Object[] content = {Year, DividendPerShare, DividendGrowth,EearningPerShare};
+                    Object[] content = {Year, DividendPerShare, DividendGrowth, EarningPerShare, Revenue, NetIncome, GrossProfit, FreeCashFlow};
                     DefaultTableModel model = (DefaultTableModel) jTable_IVDetails.getModel();
                     model.addRow(content);
             }
@@ -525,15 +569,25 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
                             String StkSymbol = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 0).toString();
                             String StkCode = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 1).toString();
                             String StkName = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 2).toString();
+                            double LastStkPrice = Double.parseDouble(jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 6).toString());
                             String BGFValue = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 7).toString();
+                            double BGF = Double.parseDouble(BGFValue);
                             String DEMValue = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 8).toString();
+                            double DEM = Double.parseDouble(DEMValue);
                             String GGMValue = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 9).toString();
+                            double GGM = Double.parseDouble(GGMValue);
                             
-                            String sql = "SELECT dps.DPS_Year, dps.DPS_Value, dps.DPS_GrowthRate, eps.EPS_Value FROM dividendpershare dps LEFT JOIN earningpershare eps ON dps.Stock_Code = eps.Stock_Code AND dps.DPS_Year = eps.EPS_Year WHERE dps.Stock_Code = '" + StkCode + "' AND eps.Stock_Code = '" + StkCode + "' LIMIT 6";
+                            String sql = "SELECT dps.DPS_Year, dps.DPS_Value, dps.DPS_GrowthRate, eps.EPS_Value, r.Revenue_Value, nI.NetIncome_Value, gP.GProfit_Value, fcf.FCF_Value FROM dividendpershare AS dps JOIN earningpershare AS eps ON dps.Stock_Code = eps.Stock_Code AND dps.DPS_Year = eps.EPS_Year JOIN revenue AS r ON dps.Stock_Code = r.Stock_Code AND dps.DPS_Year = r.Revenue_Year JOIN netincome as nI ON dps.Stock_Code = nI.Stock_Code AND dps.DPS_Year = nI.NetIncome_Year JOIN grossprofit as gP ON dps.Stock_Code = gP.Stock_Code AND dps.DPS_Year = gP.GProfit_Year JOIN freecashflow as fcf ON dps.Stock_Code = fcf.Stock_Code AND dps.DPS_Year = fcf.FCF_Year WHERE dps.Stock_Code = '"+ StkCode +"' AND eps.Stock_Code = '"+ StkCode +"' AND fcf.Stock_Code = '"+ StkCode +"' AND nI.Stock_Code = '"+ StkCode +"' AND gP.Stock_Code = '"+ StkCode +"' AND fcf.Stock_Code = '"+ StkCode +"'LIMIT 6;";IVStkName.setText(StkName);
                             IVStkSbl.setText(StkSymbol);
                             IVStkCode.setText(StkCode);
                             IVStkName.setText(StkName);
-                            if(Double.parseDouble(BGFValue) < 0.0)
+                            LatestPrice.setText(Double.toString(LastStkPrice));
+                            
+                            Compare_BGF.setText(compareDouble(LastStkPrice,BGF));
+                            Compare_DEM.setText(compareDouble(LastStkPrice,DEM));
+                            Compare_GGM.setText(compareDouble(LastStkPrice,GGM));
+        
+                            if(BGF < 0.0)
                             {
                                 IVBGF.setForeground(Color.red);
                                 IVBGF.setText("MYR " + BGFValue);
@@ -543,7 +597,7 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
                                 IVBGF.setForeground(Color.black);
                                 IVBGF.setText("MYR " + BGFValue);
                             }
-                            if(Double.parseDouble(DEMValue) < 0.0)
+                            if(DEM < 0.0)
                             {
                                 IVDEM.setForeground(Color.red);
                                 IVDEM.setText("MYR " + DEMValue);
@@ -554,7 +608,7 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
                                 IVDEM.setText("MYR " + DEMValue);
                             }
                             
-                            if(Double.parseDouble(GGMValue) < 0.0)
+                            if(GGM < 0.0)
                             {
                                 IVGGM.setForeground(Color.red);
                                 IVGGM.setText("MYR " + GGMValue);
@@ -564,6 +618,8 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
                                 IVGGM.setForeground(Color.black);
                                 IVGGM.setText("MYR " + GGMValue);
                             }
+                            
+                            
                             UpdateDetailsTable(sql);
                             jTabbedPane1.setEnabledAt(1,true);
                             jTabbedPane1.setSelectedIndex(1);
@@ -571,6 +627,68 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
                      }
                 }
             );
+    }
+    
+    public void ScreenerToIVPanel(String StkSymbol,String StkCode,String StkName,String BGFValue, String DEMValue,String GGMValue, String sql){
+        
+        IVStkSbl.setText(StkSymbol);
+        IVStkCode.setText(StkCode);
+        IVStkName.setText(StkName);
+        if(Double.parseDouble(BGFValue) < 0.0)
+        {
+            IVBGF.setForeground(Color.red);
+            IVBGF.setText("MYR " + BGFValue);
+        }
+        else
+        {   
+            IVBGF.setForeground(Color.black);
+            IVBGF.setText("MYR " + BGFValue);
+        }
+        if(Double.parseDouble(DEMValue) < 0.0)
+        {
+            IVDEM.setForeground(Color.red);
+            IVDEM.setText("MYR " + DEMValue);
+        }
+        else
+        {   
+            IVDEM.setForeground(Color.black);
+            IVDEM.setText("MYR " + DEMValue);
+        }
+        
+        if(Double.parseDouble(GGMValue) < 0.0)
+        {
+            IVGGM.setForeground(Color.red);
+            IVGGM.setText("MYR " + GGMValue);
+        }
+        else
+        {   
+            IVGGM.setForeground(Color.black);
+            IVGGM.setText("MYR " + GGMValue);
+        }
+        UpdateDetailsTable(sql);
+        jTabbedPane1.setEnabledAt(1,true);
+        jTabbedPane1.setSelectedIndex(0);
+    }
+    
+    private String compareDouble(double d1, double d2)
+    {
+        int compare = Double.compare(d1,d2);
+        String compareResult = "";
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        float f = (float) (((d2-d1)/d1)*100);
+        float output = abs(Float.valueOf(decimalFormat.format(f)));
+        
+        if(compare > 0){
+            compareResult = "(Latest Price is approximately "+ output + "% MORE than Intrinsic Value)";
+            return compareResult;
+        }
+        else if(compare < 0 ){
+            compareResult = "(Latest Price is approximately "+ output + "% LESS than Intrinsic Value)";
+            return compareResult;
+        }
+        else{
+            return compareResult = "Both price are equally the same";
+        }
     }
     
     private void jMenuItem_File_ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_File_ExitActionPerformed
@@ -582,7 +700,7 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
     }//GEN-LAST:event_SearchFieldActionPerformed
 
     private void jMenuItem_RefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_RefreshActionPerformed
-        new Watchlist().Watchlist();
+        new UpdateWatchlist().UpdateWatchlist();
     }//GEN-LAST:event_jMenuItem_RefreshActionPerformed
 
     private void jMenuItem_ScreenStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_ScreenStockActionPerformed
@@ -636,6 +754,9 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
     };
 */
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Compare_BGF;
+    private javax.swing.JLabel Compare_DEM;
+    private javax.swing.JLabel Compare_GGM;
     private javax.swing.JLabel IVBGF;
     private javax.swing.JLabel IVDEM;
     private javax.swing.JLabel IVGGM;
@@ -643,11 +764,13 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
     private javax.swing.JLabel IVStkCode;
     private javax.swing.JLabel IVStkName;
     private javax.swing.JLabel IVStkSbl;
+    private javax.swing.JLabel LatestPrice;
     private javax.swing.JTextField SearchField;
     private javax.swing.JPanel WatchlistPanel;
     private javax.swing.JLabel jLabel_Find;
     private javax.swing.JLabel jLabel_IVPerShare;
     private javax.swing.JLabel jLabel_LastUpdate;
+    private javax.swing.JLabel jLabel_LatestPrice;
     private javax.swing.JLabel jLable_IVBGF;
     private javax.swing.JLabel jLable_IVDEM;
     private javax.swing.JLabel jLable_IVGGM;
@@ -693,6 +816,11 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener{
 
     @Override
     public void mouseExited(MouseEvent me) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent ae) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

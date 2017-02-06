@@ -70,11 +70,10 @@ public class UpdateWatchlist {
             StkPrev = api.getStockPrev(StkSbl);
             StkLast = api.getStockLast(StkSbl);
 
-            //df.updateStockDetails(StkSbl, StkName, StkLow, StkHigh, StkPrev, StkLast);
-            System.out.println(StkSbl + " Updated");
-            upSplash.getWatchlistProgress();
-        }      
+            df.updateStockDetails(StkSbl, StkName, StkLow, StkHigh, StkPrev, StkLast);
+            String out = StkSbl + " Updated";
+            System.out.println(out);
+            upSplash.runUpdate(i);
+        }
     }
-    
-    
 }

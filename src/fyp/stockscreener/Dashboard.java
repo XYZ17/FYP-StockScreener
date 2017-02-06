@@ -34,6 +34,7 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener,Actio
     public Dashboard() {
         
         initComponents();
+        setIcon();
         jTabbedPane1.setEnabledAt(1,false);
         setStkCodeList();
         setupAutoComplete(SearchField, StkCodeList);
@@ -91,6 +92,8 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener,Actio
         jMenuItem_Cty_Msia = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Stock Screener Application");
+        setForeground(java.awt.Color.white);
 
         jLabel_Find.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel_Find.setText("Find");
@@ -164,11 +167,11 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener,Actio
 
             },
             new String [] {
-                "Year", "Dividend Per Share", "Dividend Growth Rate", "Earning Per Share", "Revenue", "Net Income", "Gross Profit", "Free Cash Flow"
+                "Year", "Dividend Per Share (in Cents)", "Dividend Growth Rate (in Percentage)", "Earning Per Share (in Cents)", "Revenue (in Million)", "Gross Profit (in Million)", "Net Income (in Million)", "Free Cash Flow (in Million)"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -181,6 +184,7 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener,Actio
             jTable_IVDetails.getColumnModel().getColumn(0).setResizable(false);
             jTable_IVDetails.getColumnModel().getColumn(1).setResizable(false);
             jTable_IVDetails.getColumnModel().getColumn(2).setResizable(false);
+            jTable_IVDetails.getColumnModel().getColumn(3).setResizable(false);
             jTable_IVDetails.getColumnModel().getColumn(4).setResizable(false);
             jTable_IVDetails.getColumnModel().getColumn(5).setResizable(false);
             jTable_IVDetails.getColumnModel().getColumn(6).setResizable(false);
@@ -257,10 +261,10 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener,Actio
                                             .addGroup(IVPanelLayout.createSequentialGroup()
                                                 .addComponent(IVBGF)
                                                 .addGap(169, 169, 169)
-                                                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                     .addComponent(Compare_DEM)
-                                                    .addComponent(Compare_GGM)
-                                                    .addComponent(Compare_BGF)))))
+                                                    .addComponent(Compare_GGM, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(Compare_BGF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                                     .addGroup(IVPanelLayout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(LatestPrice)))))
@@ -296,7 +300,7 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener,Actio
                 .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLable_IVBGF)
                     .addComponent(IVBGF)
-                    .addComponent(Compare_GGM))
+                    .addComponent(Compare_BGF))
                 .addGap(45, 45, 45)
                 .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLable_IVDEM)
@@ -306,7 +310,7 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener,Actio
                 .addGroup(IVPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLable_IVGGM)
                     .addComponent(IVGGM)
-                    .addComponent(Compare_BGF))
+                    .addComponent(Compare_GGM))
                 .addContainerGap(91, Short.MAX_VALUE))
         );
 
@@ -393,7 +397,9 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener,Actio
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+    private void setIcon(){
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("icon.png")));
+    }
     private void showFATable(){
         try{
             String sql = "SELECT * FROM `stock` ORDER BY `Stock_Code` ASC;";
@@ -433,8 +439,8 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener,Actio
                    double DividendGrowth = dc.rs.getDouble(3);
                    double EarningPerShare = dc.rs.getDouble(4);
                    double Revenue = dc.rs.getDouble(5);
-                   double NetIncome = dc.rs.getDouble(6);
-                   double GrossProfit = dc.rs.getDouble(7);
+                   double GrossProfit = dc.rs.getDouble(6);
+                   double NetIncome = dc.rs.getDouble(7);
                    double FreeCashFlow = dc.rs.getDouble(8);
 
                     Object[] content = {Year, DividendPerShare, DividendGrowth, EarningPerShare, Revenue, NetIncome, GrossProfit, FreeCashFlow};
@@ -443,7 +449,7 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener,Actio
             }
         }catch(Exception e){
                 JOptionPane.showMessageDialog(null, "Database not connected. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
-                System.exit(0);
+                e.printStackTrace();
         }
     }
     
@@ -577,7 +583,8 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener,Actio
                             String GGMValue = jTable_FA.getValueAt(jTable_FA.getSelectedRow(), 9).toString();
                             double GGM = Double.parseDouble(GGMValue);
                             
-                            String sql = "SELECT dps.DPS_Year, dps.DPS_Value, dps.DPS_GrowthRate, eps.EPS_Value, r.Revenue_Value, nI.NetIncome_Value, gP.GProfit_Value, fcf.FCF_Value FROM dividendpershare AS dps JOIN earningpershare AS eps ON dps.Stock_Code = eps.Stock_Code AND dps.DPS_Year = eps.EPS_Year JOIN revenue AS r ON dps.Stock_Code = r.Stock_Code AND dps.DPS_Year = r.Revenue_Year JOIN netincome as nI ON dps.Stock_Code = nI.Stock_Code AND dps.DPS_Year = nI.NetIncome_Year JOIN grossprofit as gP ON dps.Stock_Code = gP.Stock_Code AND dps.DPS_Year = gP.GProfit_Year JOIN freecashflow as fcf ON dps.Stock_Code = fcf.Stock_Code AND dps.DPS_Year = fcf.FCF_Year WHERE dps.Stock_Code = '"+ StkCode +"' AND eps.Stock_Code = '"+ StkCode +"' AND fcf.Stock_Code = '"+ StkCode +"' AND nI.Stock_Code = '"+ StkCode +"' AND gP.Stock_Code = '"+ StkCode +"' AND fcf.Stock_Code = '"+ StkCode +"'LIMIT 6;";IVStkName.setText(StkName);
+                            String sql = "SELECT dps.DPS_Year, dps.DPS_Value, dps.DPS_GrowthRate, eps.EPS_Value, r.Revenue_Value, nI.NetIncome_Value, gP.GProfit_Value, fcf.FCF_Value FROM dividendpershare AS dps JOIN earningpershare AS eps ON dps.Stock_Code = eps.Stock_Code AND dps.DPS_Year = eps.EPS_Year JOIN revenue AS r ON dps.Stock_Code = r.Stock_Code AND dps.DPS_Year = r.Revenue_Year JOIN grossprofit as gP ON dps.Stock_Code = gP.Stock_Code AND dps.DPS_Year = gP.GProfit_Year JOIN netincome as nI ON dps.Stock_Code = nI.Stock_Code AND dps.DPS_Year = nI.NetIncome_Year JOIN freecashflow as fcf ON dps.Stock_Code = fcf.Stock_Code AND dps.DPS_Year = fcf.FCF_Year WHERE dps.Stock_Code = '"+ StkCode +"' AND eps.Stock_Code = '"+ StkCode +"' AND fcf.Stock_Code = '"+ StkCode +"' AND gP.Stock_Code = '"+ StkCode +"' AND nI.Stock_Code = '"+ StkCode +"'AND fcf.Stock_Code = '"+ StkCode +"'LIMIT 6;";
+                            IVStkName.setText(StkName);
                             IVStkSbl.setText(StkSymbol);
                             IVStkCode.setText(StkCode);
                             IVStkName.setText(StkName);
@@ -630,7 +637,6 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener,Actio
     }
     
     public void ScreenerToIVPanel(String StkSymbol,String StkCode,String StkName,String BGFValue, String DEMValue,String GGMValue, String sql){
-        
         IVStkSbl.setText(StkSymbol);
         IVStkCode.setText(StkCode);
         IVStkName.setText(StkName);
@@ -675,14 +681,16 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener,Actio
         int compare = Double.compare(d1,d2);
         String compareResult = "";
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        float f = (float) (((d2-d1)/d1)*100);
-        float output = abs(Float.valueOf(decimalFormat.format(f)));
         
         if(compare > 0){
+            float output = (float) (((d1-d2)/d2)*100);
+            //float output = Float.valueOf(decimalFormat.format(f));
             compareResult = "(Latest Price is approximately "+ output + "% MORE than Intrinsic Value)";
             return compareResult;
         }
         else if(compare < 0 ){
+            float f = (float) (((d2-d1)/d2)*100);
+            float output = Float.valueOf(decimalFormat.format(f));
             compareResult = "(Latest Price is approximately "+ output + "% LESS than Intrinsic Value)";
             return compareResult;
         }
@@ -754,17 +762,17 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener,Actio
     };
 */
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Compare_BGF;
-    private javax.swing.JLabel Compare_DEM;
-    private javax.swing.JLabel Compare_GGM;
-    private javax.swing.JLabel IVBGF;
-    private javax.swing.JLabel IVDEM;
-    private javax.swing.JLabel IVGGM;
+    public javax.swing.JLabel Compare_BGF;
+    public javax.swing.JLabel Compare_DEM;
+    public javax.swing.JLabel Compare_GGM;
+    public javax.swing.JLabel IVBGF;
+    public javax.swing.JLabel IVDEM;
+    public javax.swing.JLabel IVGGM;
     private javax.swing.JPanel IVPanel;
-    private javax.swing.JLabel IVStkCode;
-    private javax.swing.JLabel IVStkName;
-    private javax.swing.JLabel IVStkSbl;
-    private javax.swing.JLabel LatestPrice;
+    public javax.swing.JLabel IVStkCode;
+    public javax.swing.JLabel IVStkName;
+    public javax.swing.JLabel IVStkSbl;
+    public javax.swing.JLabel LatestPrice;
     private javax.swing.JTextField SearchField;
     private javax.swing.JPanel WatchlistPanel;
     private javax.swing.JLabel jLabel_Find;
@@ -789,7 +797,7 @@ public class Dashboard extends javax.swing.JFrame implements MouseListener,Actio
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    public javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable_FA;
     private javax.swing.JTable jTable_IVDetails;
     // End of variables declaration//GEN-END:variables

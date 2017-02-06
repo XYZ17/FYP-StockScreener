@@ -50,7 +50,12 @@ public class setStockDEM {
                     Earnings = df.getEarning(StkCd);
                     
                     for(int j=1;j<11;j++){
-                    Earnings *= (1+EPS_GrowthRate);
+                    if(j==1){
+			Earnings = Earnings;
+                    }
+                    else{
+                            Earnings *= (1+EPS_GrowthRate);
+                    }
                     DiscountRate = 1/(Math.pow((1+RiskFreeRate),j));
                     DiscountedEarnings = Earnings*DiscountRate;
                     if(j==1){

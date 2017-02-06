@@ -6,6 +6,7 @@
 package fyp.stockscreener;
 
 import fyp.database.DatabaseConnection;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -23,13 +24,14 @@ public class StockScreener extends javax.swing.JFrame implements MouseListener{
     /**
      * Creates new form StockScreener
      */
-    Dashboard dashboard = new Dashboard();
+    private Dashboard dashboard;
     private double Rule_Range = 1.00;
     
     DatabaseConnection dc = new DatabaseConnection();
     
     public StockScreener() {
         initComponents();
+        setIcon();
         SelectedRow();
     }
 
@@ -54,6 +56,7 @@ public class StockScreener extends javax.swing.JFrame implements MouseListener{
         jLabel_SelectRule2_Range = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Stock Screener");
         setResizable(false);
 
         jTable_ScreenerResults.setModel(new javax.swing.table.DefaultTableModel(
@@ -108,7 +111,7 @@ public class StockScreener extends javax.swing.JFrame implements MouseListener{
 
         jLabel_SelectRule1_Formula.setText("Formula used: ");
 
-        jComboBox_ScreeningRange.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Price < Intrinsic Value", "Less than 80%", "Less than 50%", "Less than 20%" }));
+        jComboBox_ScreeningRange.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Price < Intrinsic Value", "Less than 80%", "Less than 50%", "Less than 30%" }));
         jComboBox_ScreeningRange.setSelectedItem("Price < Intrinsic Value");
         jComboBox_ScreeningRange.setEnabled(false);
         jComboBox_ScreeningRange.addActionListener(new ActionListener()
@@ -126,8 +129,8 @@ public class StockScreener extends javax.swing.JFrame implements MouseListener{
                         case("Less than 50%"):
                         setRange(0.50);
                         break;
-                        case("Less than 20%"):
-                        setRange(0.20);
+                        case("Less than 30%"):
+                        setRange(0.30);
                         break;
                         default:
                         setRange(1.00);
@@ -195,7 +198,11 @@ public class StockScreener extends javax.swing.JFrame implements MouseListener{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    private void setIcon(){
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("icon.png")));
+    }
+    
     private void setRange(double Rule_Range){
         this.Rule_Range = Rule_Range;
     }
@@ -271,6 +278,7 @@ public class StockScreener extends javax.swing.JFrame implements MouseListener{
             (
                 new MouseAdapter()
                 {
+                    @Override
                     public void mouseClicked(MouseEvent e) {
                         if (e.getClickCount() == 2) {
                             String StkSymbol = jTable_ScreenerResults.getValueAt(jTable_ScreenerResults.getSelectedRow(), 0).toString();
@@ -280,7 +288,7 @@ public class StockScreener extends javax.swing.JFrame implements MouseListener{
                             String DEMValue = jTable_ScreenerResults.getValueAt(jTable_ScreenerResults.getSelectedRow(), 8).toString();
                             String GGMValue = jTable_ScreenerResults.getValueAt(jTable_ScreenerResults.getSelectedRow(), 9).toString();
                             
-                            String sql = "SELECT dps.DPS_Year, dps.DPS_Value, dps.DPS_GrowthRate, eps.EPS_Value FROM dividendpershare dps LEFT JOIN earningpershare eps ON dps.Stock_Code = eps.Stock_Code AND dps.DPS_Year = eps.EPS_Year WHERE dps.Stock_Code = '" + StkCode + "' AND eps.Stock_Code = '" + StkCode + "' LIMIT 6";
+                            String sql = "SELECT dps.DPS_Year, dps.DPS_Value, dps.DPS_GrowthRate, eps.EPS_Value, r.Revenue_Value, nI.NetIncome_Value, gP.GProfit_Value, fcf.FCF_Value FROM dividendpershare AS dps JOIN earningpershare AS eps ON dps.Stock_Code = eps.Stock_Code AND dps.DPS_Year = eps.EPS_Year JOIN revenue AS r ON dps.Stock_Code = r.Stock_Code AND dps.DPS_Year = r.Revenue_Year JOIN netincome as nI ON dps.Stock_Code = nI.Stock_Code AND dps.DPS_Year = nI.NetIncome_Year JOIN grossprofit as gP ON dps.Stock_Code = gP.Stock_Code AND dps.DPS_Year = gP.GProfit_Year JOIN freecashflow as fcf ON dps.Stock_Code = fcf.Stock_Code AND dps.DPS_Year = fcf.FCF_Year WHERE dps.Stock_Code = '"+ StkCode +"' AND eps.Stock_Code = '"+ StkCode +"' AND fcf.Stock_Code = '"+ StkCode +"' AND nI.Stock_Code = '"+ StkCode +"' AND gP.Stock_Code = '"+ StkCode +"' AND fcf.Stock_Code = '"+ StkCode +"'LIMIT 6;";
                             dashboard.ScreenerToIVPanel(StkSymbol,StkCode,StkName,BGFValue,DEMValue,GGMValue,sql);
                         }
                      }
